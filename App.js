@@ -5,55 +5,59 @@ import HomeScreen from './src/screen/HomeScreen';
 import AccountScreen from './src/screen/AccountScreen';
 import ProfileScreen from './src/screen/ProfileScreen';
 
+
 // Import Heroicons
 import HomeIcon from 'react-native-heroicons/outline/HomeIcon';
 import EyeIcon from 'react-native-heroicons/mini/EyeIcon';
 import UserIcon from 'react-native-heroicons/outline/UserIcon';
 import { KeyboardAvoidingView, Platform, View, StyleSheet } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import SplashScreen from './src/screen/SplashScreen';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-const App = () => {
-    return (
-        <>
-            {/* <OnboardScreen /> */}
-            <NavigationContainer>
-                <KeyboardAvoidingView
-                    style={styles.container}
-                    behavior={Platform.OS === "ios" ? "padding" : "height"}
-                    keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -100}
-                >
-                    <View style={styles.container}>
-                        <Tab.Navigator
-                            initialRouteName='Home'
-                            backBehavior='history'
-                            screenOptions={({ route }) => ({
-                                tabBarIcon: ({ color, size }) => {
-                                    let IconComponent;
-                                    if (route.name === 'Home') {
-                                        IconComponent = HomeIcon;
-                                    } else if (route.name === 'Passwords') {
-                                        IconComponent = EyeIcon;
-                                    } else if (route.name === 'Profile') {
-                                        IconComponent = UserIcon;
-                                    }
-                                    return <IconComponent width={size} height={size} fill={color} />;
-                                },
-                                tabBarActiveTintColor: 'tomato',
-                                tabBarInactiveTintColor: 'gray',
-                                tabBarStyle: styles.tabBarStyle,
-                            })}
-                        >
-                            <Tab.Screen name='Home' component={HomeScreen} options={{ headerShown: false }} />
-                            <Tab.Screen name='Passwords' component={AccountScreen} options={{ headerShown: false }} />
-                            <Tab.Screen name='Profile' component={ProfileScreen} options={{ headerShown: false }} />
-                        </Tab.Navigator>
-                    </View>
-                </KeyboardAvoidingView>
-            </NavigationContainer>
-        </>
-    );
-};
+const TabNavigator = () => (
+    <Tab.Navigator
+        initialRouteName="Home"
+        backBehavior="history"
+        screenOptions={({ route }) => ({
+            tabBarIcon: ({ color, size }) => {
+                let IconComponent;
+                if (route.name === 'Home') {
+                    IconComponent = HomeIcon;
+                } else if (route.name === 'Passwords') {
+                    IconComponent = EyeIcon;
+                } else if (route.name === 'Profile') {
+                    IconComponent = UserIcon;
+                }
+                return <IconComponent width={size} height={size} fill={color} />;
+            },
+            tabBarActiveTintColor: 'tomato',
+            tabBarInactiveTintColor: 'gray',
+            tabBarStyle: styles.tabBarStyle,
+        })}
+    >
+        <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+        <Tab.Screen name="Passwords" component={AccountScreen} options={{ headerShown: false }} />
+        <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+    </Tab.Navigator>
+);
+
+const App = () => (
+    <NavigationContainer>
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -100}
+        >
+            <Stack.Navigator initialRouteName="Splash">
+                <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="Tab" component={TabNavigator} options={{ headerShown: false }} />
+            </Stack.Navigator>
+        </KeyboardAvoidingView>
+    </NavigationContainer>
+);
 
 const styles = StyleSheet.create({
     container: {

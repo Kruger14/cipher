@@ -45,6 +45,11 @@ const AccountScreen = () => {
                     <PasswordCard />
                     <PasswordCard />
                     <PasswordCard />
+                    <PasswordCard />
+                    <PasswordCard />
+                    <PasswordCard />
+                    <PasswordCard />
+                    <PasswordCard />
                 </View>
             </ScrollView>
         </>

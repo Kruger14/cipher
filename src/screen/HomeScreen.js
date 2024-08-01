@@ -31,13 +31,13 @@ const HomeScreen = () => {
 
                 <View style={styles.form}>
                     <Text style={styles.inptxt}>User Name</Text>
-                    <TextInput style={styles.inp} />
+                    <TextInput placeholder='Enter Username' style={styles.inp} />
 
                     <Text style={styles.inptxt}>Password</Text>
-                    <TextInput style={styles.inp} secureTextEntry />
+                    <TextInput placeholder='Enter Password' style={styles.inp} secureTextEntry />
 
                     <Text style={styles.inptxt}>Network Image</Text>
-                    <TextInput style={styles.inp} />
+                    <TextInput placeholder="Enter sites's logo uri  " style={styles.inp} />
 
                     <TouchableOpacity>
                         <View style={styles.button}>
