@@ -1,5 +1,7 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform } from 'react-native';
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, Dimensions, ScrollView } from 'react-native';
+
+const { width, height } = Dimensions.get('screen');
 
 const HomeScreen = () => {
 
@@ -16,32 +18,34 @@ const HomeScreen = () => {
             </View>
             {/* appbar */}
 
-            <View style={styles.welcomeBox}>
-                <Text style={styles.greet}>Welcome back!</Text>
-                <Text style={styles.user}>User Name</Text>
-                <Text style={styles.saying}>Keep your Passwords safe with Cipher</Text>
-            </View>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.welcomeBox}>
+                    <Text style={styles.greet}>Welcome back!</Text>
+                    <Text style={styles.user}>User Name</Text>
+                    <Text style={styles.saying}>Keep your Passwords safe with Cipher</Text>
+                </View>
 
-            <View style={styles.imgView}>
-                <Image source={{ uri: a }} style={styles.img} />
-            </View>
+                <View style={styles.imgView}>
+                    <Image source={{ uri: a }} style={styles.img} />
+                </View>
 
-            <View style={styles.form}>
-                <Text style={styles.inptxt}>User Name</Text>
-                <TextInput style={styles.inp} />
+                <View style={styles.form}>
+                    <Text style={styles.inptxt}>User Name</Text>
+                    <TextInput style={styles.inp} />
 
-                <Text style={styles.inptxt}>Password</Text>
-                <TextInput style={styles.inp} secureTextEntry />
+                    <Text style={styles.inptxt}>Password</Text>
+                    <TextInput style={styles.inp} secureTextEntry />
 
-                <Text style={styles.inptxt}>Network Image</Text>
-                <TextInput style={styles.inp} />
+                    <Text style={styles.inptxt}>Network Image</Text>
+                    <TextInput style={styles.inp} />
 
-                <TouchableOpacity>
-                    <View style={styles.button}>
-                        <Text style={styles.buttonText}>Save</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
+                    <TouchableOpacity>
+                        <View style={styles.button}>
+                            <Text style={styles.buttonText}>Save</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
         </KeyboardAvoidingView>
     );
 }
@@ -51,75 +55,71 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     appbar: {
-        marginTop: 15,
+        marginTop: height * 0.02,
         flexDirection: 'row',
-        marginLeft: 15,
-        marginRight: 15,
+        marginHorizontal: width * 0.04,
         justifyContent: 'center',
         alignItems: 'center',
     },
     txt: {
         color: "black",
-        fontSize: 24,
+        fontSize: width * 0.06,
     },
     welcomeBox: {
         flexDirection: 'column',
-        marginTop: 15,
-        marginLeft: 15,
-        marginRight: 15,
+        marginTop: height * 0.02,
+        marginHorizontal: width * 0.04,
         borderWidth: 1,
         backgroundColor: 'gray',
-        padding: 28,
+        padding: width * 0.07,
         borderRadius: 16,
     },
     greet: {
         color: "black",
-        fontSize: 15,
+        fontSize: width * 0.04,
     },
     user: {
         color: "black",
-        fontSize: 24,
+        fontSize: width * 0.06,
     },
     saying: {
-        fontSize: 18,
+        fontSize: width * 0.045,
         color: 'black',
     },
     form: {
-        marginLeft: 15,
-        marginRight: 15,
-        padding: 10,
+        marginHorizontal: width * 0.04,
+        padding: width * 0.025,
     },
     inp: {
         borderWidth: 1,
-        height: 36,
+        height: height * 0.05,
         color: 'black',
         borderRadius: 8,
-        marginBottom: 10,
-        paddingHorizontal: 10,
+        marginBottom: height * 0.015,
+        paddingHorizontal: width * 0.025,
     },
     img: {
-        height: 200,
-        width: 200,
+        height: height * 0.25,
+        width: height * 0.25,
     },
     inptxt: {
         color: 'black',
-        fontSize: 14,
-        marginBottom: 5,
+        fontSize: width * 0.035,
+        marginBottom: height * 0.005,
     },
     imgView: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: 15,
-        marginRight: 15,
+        marginHorizontal: width * 0.04,
     },
     button: {
-        padding: 10,
-        width: 75,
+        padding: width * 0.025,
+        width: width * 0.25,
         backgroundColor: "blue",
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 16,
-        marginTop: 10,
+        marginTop: height * 0.015,
     },
     buttonText: {
         color: 'white',

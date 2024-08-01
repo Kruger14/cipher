@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react'
-import { View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
-import { ChevronRightIcon } from 'react-native-heroicons/outline';
-import { ChevronLeftIcon } from 'react-native-heroicons/outline';
-import { PlusCircleIcon, BookmarkIcon, ArrowDownOnSquareIcon } from 'react-native-heroicons/outline';
+import React from 'react';
+import { View, StyleSheet, TouchableOpacity, Text, Image, Dimensions, ScrollView } from 'react-native';
+import { ChevronRightIcon, ChevronLeftIcon, PlusCircleIcon, BookmarkIcon, ArrowDownOnSquareIcon } from 'react-native-heroicons/outline';
+
+const { width, height } = Dimensions.get('screen');
 
 const Profilescreen = () => {
     const Navigate = useNavigation();
@@ -13,12 +13,11 @@ const Profilescreen = () => {
             <View style={styles.appBar}>
                 <TouchableOpacity onPress={() => { Navigate.navigate('Home') }}>
                     <View style={styles.iconWrapper}>
-                        <ChevronLeftIcon color={"black"} height={24} width={24} />
+                        <ChevronLeftIcon color={"black"} height={width * 0.06} width={width * 0.06} />
                     </View>
                 </TouchableOpacity>
             </View>
             {/* appBar end */}
-
 
             {/* mainContainer */}
             <View style={styles.mainContainer}>
@@ -35,54 +34,54 @@ const Profilescreen = () => {
                 </View>
 
                 <View style={styles.cardContainer}>
-                    {/* settingsList  start*/}
-                    <View style={styles.settingsList}>
-
-                        <TouchableOpacity style={styles.settingsItem}>
-                            <View style={styles.settingsItemin}>
-                                <PlusCircleIcon color={"black"} width={24} height={24} />
-                                <Text>Add Another</Text>
-                            </View>
-                            <ChevronRightIcon color={"black"} width={24} height={24} />
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.settingsItem}>
-                            <View style={styles.settingsItemin}>
-                                <BookmarkIcon color={"black"} width={24} height={24} />
-                                <Text>Total Passwords saved</Text>
-                            </View>
-                            <ChevronRightIcon color={"black"} width={24} height={24} />
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.settingsItem}>
-                            <View style={styles.settingsItemin}>
-                                <ArrowDownOnSquareIcon color={"black"} width={24} height={24} />
-                                <Text>save as json file</Text>
-                            </View>
-                            <ChevronRightIcon color={"black"} width={24} height={24} />
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.settingsItem}>
-                            <View style={styles.settingsItemin}>
-                                <Text>Support and Feedback</Text>
-                            </View>
-                            <ChevronRightIcon color={"black"} width={24} height={24} />
-                        </TouchableOpacity>
+                    <ScrollView showsVerticalScrollIndicator={false}>
                         {/* settingsList  start*/}
-                    </View>
-                </View>
-            </View>
-        </>
-    )
-}
+                        <View style={styles.settingsList}>
 
+                            <TouchableOpacity style={styles.settingsItem}>
+                                <View style={styles.settingsItemin}>
+                                    <PlusCircleIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                                    <Text style={styles.settingsText}>Add Another</Text>
+                                </View>
+                                <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.settingsItem}>
+                                <View style={styles.settingsItemin}>
+                                    <BookmarkIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                                    <Text style={styles.settingsText}>Total Passwords saved</Text>
+                                </View>
+                                <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.settingsItem}>
+                                <View style={styles.settingsItemin}>
+                                    <ArrowDownOnSquareIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                                    <Text style={styles.settingsText}>Save as JSON file</Text>
+                                </View>
+                                <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.settingsItem}>
+                                <View style={styles.settingsItemin}>
+                                    <Text style={styles.settingsText}>Support and Feedback</Text>
+                                </View>
+                                <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                            </TouchableOpacity>
+                            {/* settingsList  end*/}
+                        </View>
+                    </ScrollView>
+                </View>
+            </View >
+        </>
+    );
+}
 
 const styles = StyleSheet.create({
     appBar: {
-        marginTop: 15,
+        marginTop: height * 0.02,
         flexDirection: 'row',
-        marginLeft: 15,
-        marginRight: 15,
+        marginHorizontal: width * 0.04,
         justifyContent: 'space-between',
         alignItems: 'center',
     },
@@ -90,42 +89,40 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         display: 'flex',
-        padding: 12,
+        padding: width * 0.03,
         elevation: 1,
         borderRadius: 100,
     },
     detailText: {
-        fontSize: 20,
+        fontSize: width * 0.05,
         color: 'black',
         fontWeight: '300',
     },
-
     mainContainer: {
         flex: 1,
         alignItems: 'center',
-        padding: 16,
+        padding: width * 0.04,
     },
     header: {
         color: '#fff',
         width: '100%',
         borderRadius: 30,
-        padding: 24,
         alignItems: 'center',
     },
     headerTitle: {
-        fontSize: 24,
+        fontSize: width * 0.06,
         fontWeight: 'bold',
         color: 'black',
-        marginBottom: 16,
+        marginBottom: height * 0.02,
     },
     profileWrapper: {
         position: 'relative',
-        marginBottom: 16,
+        marginBottom: height * 0.02,
     },
     profileImage: {
-        width: 96,
-        height: 96,
-        borderRadius: 50,
+        width: width * 0.24,
+        height: width * 0.24,
+        borderRadius: width * 0.12,
         borderWidth: 4,
         borderColor: '#f8f9fa',
     },
@@ -135,14 +132,14 @@ const styles = StyleSheet.create({
         right: 0,
         backgroundColor: '#28a745',
         color: '#fff',
-        borderRadius: 50,
-        padding: 4,
-        fontSize: 12,
+        borderRadius: width * 0.12,
+        padding: width * 0.01,
+        fontSize: width * 0.03,
     },
     ownerName: {
-        fontSize: 20,
+        fontSize: width * 0.05,
         fontWeight: '600',
-        marginTop: 8,
+        marginTop: height * 0.01,
     },
     ownerEmail: {
         color: '#6c757d',
@@ -152,8 +149,9 @@ const styles = StyleSheet.create({
         width: '100%',
         flex: 1,
         borderRadius: 12,
-        padding: 24,
-        marginTop: 24,
+        padding: width * 0.06,
+        marginTop: height * 0.03,
+        marginBottom: height * 0.03,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -164,7 +162,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     settingsList: {
-        spaceVertical: 16,
+        spaceVertical: height * 0.02,
     },
     settingsItem: {
         elevation: 4,
@@ -172,19 +170,21 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 16,
+        padding: width * 0.04,
         borderRadius: 8,
-        marginBottom: 8,
+        marginBottom: height * 0.01,
     },
     settingsItemin: {
         flexDirection: 'row',
-        gap: 10
+        gap: width * 0.025,
+    },
+    settingsText: {
+        fontSize: width * 0.04,
     },
     arrow: {
-        width: 24,
-        height: 24,
+        width: width * 0.06,
+        height: width * 0.06,
     },
 });
-
 
 export default Profilescreen;

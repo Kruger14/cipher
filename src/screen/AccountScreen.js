@@ -1,18 +1,21 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import PasswordCard from '../util/PasswordCard';
 
+const { width, height } = Dimensions.get('screen');
+
 const AccountScreen = () => {
     const Navigate = useNavigation();
+
     return (
         <>
-            {/* appBar start*/}
+            {/* appBar start */}
             <View style={styles.appBar}>
                 <TouchableOpacity onPress={() => { Navigate.navigate('Home') }}>
                     <View style={styles.iconWrapper}>
-                        <ChevronLeftIcon color={"blue"} height={24} width={24} />
+                        <ChevronLeftIcon color={"blue"} height={width * 0.06} width={width * 0.06} />
                     </View>
                 </TouchableOpacity>
 
@@ -22,7 +25,7 @@ const AccountScreen = () => {
             </View>
             {/* appBar end */}
 
-            {/* totalcount  */}
+            {/* totalcount */}
             <View style={styles.totalCountContainer}>
                 <View style={styles.txt}>
                     <Text style={styles.headerTitle}>Passwords saved</Text>
@@ -32,25 +35,27 @@ const AccountScreen = () => {
                     <Text style={styles.headerTitle}>10</Text>
                 </View>
             </View>
-            {/* totalcount  */}
+            {/* totalcount */}
 
-            {/* Passwords cards goes here */}
-            <ScrollView>
-                <View>
+            {/* Passwords cards go here */}
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.passwordbox}>
+                    <PasswordCard />
+                    <PasswordCard />
+                    <PasswordCard />
+                    <PasswordCard />
                     <PasswordCard />
                 </View>
             </ScrollView>
         </>
-    )
-}
-
+    );
+};
 
 const styles = StyleSheet.create({
     appBar: {
-        marginTop: 15,
+        marginTop: height * 0.02,
         flexDirection: 'row',
-        marginLeft: 15,
-        marginRight: 15,
+        marginHorizontal: width * 0.04,
         justifyContent: 'space-between',
         alignItems: 'center',
     },
@@ -58,26 +63,28 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         display: 'flex',
-        padding: 12,
+        padding: width * 0.03,
         elevation: 1,
         borderRadius: 100,
     },
     headerTitle: {
-        fontSize: 24,
+        fontSize: width * 0.06,
         fontWeight: 'bold',
         color: 'black',
-        marginBottom: 16,
     },
     txt: {
-        marginTop: 8,
+        marginTop: height * 0.01,
     },
     totalCountContainer: {
         flexDirection: 'row',
         justifyContent: "space-between",
         alignItems: "center",
-        marginTop: 10,
-        marginLeft: 15,
-        marginRight: 15,
+        marginTop: height * 0.015,
+        marginHorizontal: width * 0.04,
+    },
+    passwordbox: {
+        paddingTop: height * 0.005,
+        paddingBottom: height * 0.06,
     },
 });
 

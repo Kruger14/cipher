@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { PencilSquareIcon } from "react-native-heroicons/outline/";
-import { TrashIcon } from "react-native-heroicons/outline/";
+import { PencilSquareIcon, TrashIcon } from 'react-native-heroicons/outline';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Bottomsheet from './Bottomsheet';
 
@@ -11,18 +10,22 @@ const PasswordCard = () => {
     return (
         <>
             <View style={styles.container}>
-                <Image source={require("../assets/img.png")} style={styles.image} />
+                <Image source={require('../assets/img.png')} style={styles.image} />
                 <View style={styles.userInfo}>
                     <Text style={styles.username}>Username</Text>
                     <Text style={styles.userBio}>bio</Text>
                 </View>
                 <View style={styles.buttonsContainer}>
-                    <TouchableOpacity onPress={() => refRBSheet.current.open()} style={[styles.button, styles.editButton]} >
-                        <PencilSquareIcon color={"black"} height={24} width={24} />
+                    <TouchableOpacity
+                        onPress={() => refRBSheet.current.open()}
+                        style={[styles.button, styles.editButton]}
+                        accessibilityLabel="Edit Password"
+                    >
+                        <PencilSquareIcon color={'black'} height={24} width={24} />
                         <Text style={styles.editButtonText}>Edit</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, styles.deleteButton]}>
-                        <TrashIcon color={"black"} height={24} width={24} />
+                    <TouchableOpacity style={[styles.button, styles.deleteButton]} accessibilityLabel="Delete Password">
+                        <TrashIcon color={'black'} height={24} width={24} />
                         <Text style={styles.deleteButtonText}>Delete</Text>
                     </TouchableOpacity>
                 </View>
@@ -66,8 +69,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0,
         shadowRadius: 5,
         elevation: 3,
-        marginLeft: 15,
-        marginRight: 15,
+        marginHorizontal: 15,
         marginTop: 10,
     },
     image: {
@@ -87,12 +89,11 @@ const styles = StyleSheet.create({
         color: '#999',
     },
     buttonsContainer: {
-        gap: 15,
         flexDirection: 'row',
+        gap: 8,
     },
     button: {
         flexDirection: 'row',
-        gap: 10,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 8,
@@ -102,13 +103,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#337ab7',
     },
     editButtonText: {
-        color: "black",
+        color: 'black',
     },
     deleteButton: {
         backgroundColor: '#c0392b',
     },
     deleteButtonText: {
-        color: "black",
+        color: 'black',
     },
 });
 

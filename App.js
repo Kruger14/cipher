@@ -16,6 +16,7 @@ const Tab = createBottomTabNavigator();
 const App = () => {
     return (
         <>
+            {/* <OnboardScreen /> */}
             <NavigationContainer>
                 <KeyboardAvoidingView
                     style={styles.container}

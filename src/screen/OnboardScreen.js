@@ -1,97 +1,96 @@
-import React from 'react'
-import { View, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, StyleSheet, Text, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import { ChevronRightIcon } from 'react-native-heroicons/outline';
 
+const { width, height } = Dimensions.get('screen');
+
 const OnboardScreen = () => {
-    const a = "https://cdn.pixabay.com/photo/2016/11/18/11/16/instagram-1834010_1280.png";
-
     return (
-        <>
-            <View style={styles.container}>
-                {/* appbar */}
-                <View style={styles.appbar}>
-                    <Text style={styles.txt}>Thank you for installing Cipher, </Text>
-                    <Text style={styles.txt}>placing your trust in us</Text>
-                </View>
-                {/* appbar */}
-
-
-                <View style={styles.welcomeBox}>
-                    <Text style={styles.txt}>Organize and protect all your passwords with SecureVault.
-                        Say goodbye to password fatigue and hello to seamless, secure access.</Text>
-                </View>
-
-                <View style={styles.form}>
-                    <Text style={styles.inptxt}>User Name</Text>
-                    <TextInput placeholder='Enter your name to display in homepage' style={styles.inp} />
-                </View>
-
-                <TouchableOpacity style={styles.posogbtn}>
-                    <View style={styles.button}>
-                        <ChevronRightIcon color={"black"} height={24} width={24} />
-                    </View>
-                </TouchableOpacity>
+        <View style={styles.container}>
+            {/* appbar */}
+            <View style={styles.appbar}>
+                <Text style={styles.txt}>Thank you for installing Cipher,</Text>
+                <Text style={styles.txt}>placing your trust in us</Text>
             </View>
-        </>
-    )
+            {/* appbar */}
+
+            <View style={styles.welcomeBox}>
+                <Text style={styles.welcomeText}>Organize and protect all your passwords with SecureVault. Say goodbye to password fatigue and hello to seamless, secure access.</Text>
+            </View>
+
+            <View style={styles.form}>
+                <Text style={styles.inptxt}>User Name</Text>
+                <TextInput placeholder='Enter your name to display in homepage' style={styles.inp} />
+            </View>
+
+            <TouchableOpacity style={styles.posogbtn}>
+                <View style={styles.button}>
+                    <ChevronRightIcon color={"black"} height={width * 0.06} width={width * 0.06} />
+                </View>
+            </TouchableOpacity>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginLeft: 15,
-        marginRight: 15,
+        marginHorizontal: width * 0.04,
     },
     appbar: {
-        marginTop: 15,
+        marginTop: height * 0.02,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
     },
     txt: {
         color: "black",
-        fontSize: 24,
+        fontSize: width * 0.06,
+        textAlign: 'center',
     },
     welcomeBox: {
         flexDirection: 'column',
-        marginTop: 50,
-        marginLeft: 15,
-        marginRight: 15,
+        marginTop: height * 0.07,
+        marginHorizontal: width * 0.04,
         borderWidth: 1,
         backgroundColor: 'gray',
-        padding: 28,
+        padding: width * 0.07,
         borderRadius: 16,
+    },
+    welcomeText: {
+        color: "black",
+        fontSize: width * 0.04,
+        textAlign: 'center',
     },
     inp: {
         borderWidth: 1,
-        height: 36,
+        height: 35,
         color: 'black',
         borderRadius: 8,
-        marginBottom: 10,
-        paddingHorizontal: 10,
+        marginBottom: height * 0.015,
+        paddingHorizontal: width * 0.025,
     },
     inptxt: {
         color: 'black',
-        fontSize: 14,
-        marginBottom: 5,
+        fontSize: width * 0.035,
+        marginBottom: height * 0.005,
     },
     form: {
-        marginTop: 50,
-        padding: 10,
+        marginTop: height * 0.07,
+        padding: width * 0.025,
     },
-
     button: {
-        height: 75,
-        width: 75,
+        height: 50,
+        width: 50,
         backgroundColor: "#565d6d",
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 50,
+        borderRadius: width * 0.5,
     },
-
     posogbtn: {
-        marginTop: 135,
+        marginTop: height * 0.18,
+        marginBottom: height * 0.18,
         flexDirection: "row",
         justifyContent: "center",
     },
