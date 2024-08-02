@@ -13,6 +13,7 @@ import UserIcon from 'react-native-heroicons/outline/UserIcon';
 import { KeyboardAvoidingView, Platform, View, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from './src/screen/SplashScreen';
+import OnboardScreen from './src/screen/OnboardScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -20,7 +21,7 @@ const Stack = createStackNavigator();
 const TabNavigator = () => (
     <Tab.Navigator
         initialRouteName="Home"
-        backBehavior="history"
+        backBehavior="initialRoute"
         screenOptions={({ route }) => ({
             tabBarIcon: ({ color, size }) => {
                 let IconComponent;
@@ -53,6 +54,7 @@ const App = () => (
         >
             <Stack.Navigator initialRouteName="Splash">
                 <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="Onboard" component={OnboardScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Tab" component={TabNavigator} options={{ headerShown: false }} />
             </Stack.Navigator>
         </KeyboardAvoidingView>

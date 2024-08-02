@@ -1,11 +1,29 @@
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, Dimensions, ScrollView } from 'react-native';
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, Dimensions, ScrollView, ToastAndroid, BackHandler } from 'react-native';
 
 const { width, height } = Dimensions.get('screen');
 
 const HomeScreen = () => {
 
+    const stack = useNavigation();
+
     const a = "https://cdn.pixabay.com/photo/2016/11/18/11/16/instagram-1834010_1280.png";
+
+    useFocusEffect(
+        React.useCallback(() => {
+            const onBackPress = () => {
+                ToastAndroid.show("You can't go back", ToastAndroid.SHORT)
+                return true;
+            }
+
+            BackHandler.addEventListener("hardwareBackPress", onBackPress);
+
+            return () => {
+                BackHandler.removeEventListener('hardwareBackPress', () => stack.goBack());
+            }
+        }, [stack])
+    );
 
     return (
         <KeyboardAvoidingView
@@ -70,9 +88,9 @@ const styles = StyleSheet.create({
         marginTop: height * 0.02,
         marginHorizontal: width * 0.04,
         borderWidth: 1,
-        backgroundColor: 'gray',
         padding: width * 0.07,
         borderRadius: 16,
+        backgroundColor: 'rgba(248, 249, 250, 0.8)',
     },
     greet: {
         color: "black",

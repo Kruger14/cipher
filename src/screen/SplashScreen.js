@@ -22,7 +22,7 @@ const SplashScreen = () => {
         }, 800)
 
         setTimeout(() => {
-            tab.navigate('Tab')
+            tab.navigate('Onboard')
         }, 1200)
     }, []);
 
