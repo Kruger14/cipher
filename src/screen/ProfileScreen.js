@@ -138,12 +138,13 @@ const styles = StyleSheet.create({
         color: '#6c757d',
     },
     cardContainer: {
+        justifyContent: "space-evenly",
         backgroundColor: '#fff',
         width: '100%',
         flex: 1,
-        borderRadius: 12,
+        borderRadius: 16,
         padding: width * 0.06,
-        marginTop: height * 0.03,
+        marginTop: height * 0.08,
         marginBottom: height * 0.03,
         shadowColor: '#000',
         shadowOffset: {
