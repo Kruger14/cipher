@@ -6,12 +6,12 @@ import { ChevronRightIcon, ChevronLeftIcon, PlusCircleIcon, BookmarkIcon, ArrowD
 const { width, height } = Dimensions.get('screen');
 
 const Profilescreen = () => {
-    const Navigate = useNavigation();
+    const stack = useNavigation();
     return (
         <>
             {/* appBar start */}
             <View style={styles.appBar}>
-                <TouchableOpacity onPress={() => { Navigate.navigate('Home') }}>
+                <TouchableOpacity onPress={() => { stack.navigate('Home') }}>
                     <View style={styles.iconWrapper}>
                         <ChevronLeftIcon color={"black"} height={width * 0.06} width={width * 0.06} />
                     </View>
@@ -38,7 +38,7 @@ const Profilescreen = () => {
                         {/* settingsList  start*/}
                         <View style={styles.settingsList}>
 
-                            <TouchableOpacity style={styles.settingsItem}>
+                            <TouchableOpacity onPress={() => { stack.navigate('Home') }} style={styles.settingsItem}>
                                 <View style={styles.settingsItemin}>
                                     <PlusCircleIcon color={"black"} width={width * 0.06} height={width * 0.06} />
                                     <Text style={styles.settingsText}>Add Another</Text>
@@ -46,7 +46,7 @@ const Profilescreen = () => {
                                 <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.settingsItem}>
+                            <TouchableOpacity onPress={() => { stack.navigate('Passwords') }} style={styles.settingsItem}>
                                 <View style={styles.settingsItemin}>
                                     <BookmarkIcon color={"black"} width={width * 0.06} height={width * 0.06} />
                                     <Text style={styles.settingsText}>Total Passwords saved</Text>
@@ -58,13 +58,6 @@ const Profilescreen = () => {
                                 <View style={styles.settingsItemin}>
                                     <ArrowDownOnSquareIcon color={"black"} width={width * 0.06} height={width * 0.06} />
                                     <Text style={styles.settingsText}>Save as JSON file</Text>
-                                </View>
-                                <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.settingsItem}>
-                                <View style={styles.settingsItemin}>
-                                    <Text style={styles.settingsText}>Support and Feedback</Text>
                                 </View>
                                 <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
                             </TouchableOpacity>

@@ -1,5 +1,5 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, Dimensions, ScrollView, ToastAndroid, BackHandler } from 'react-native';
 
 const { width, height } = Dimensions.get('screen');
@@ -7,8 +7,32 @@ const { width, height } = Dimensions.get('screen');
 const HomeScreen = () => {
 
     const stack = useNavigation();
-
     const a = "https://cdn.pixabay.com/photo/2016/11/18/11/16/instagram-1834010_1280.png";
+
+    const [data, setData] = useState({
+        username: "",
+        password: "",
+        netimage: "",
+    });
+
+
+
+    const handleInputChange = (name, value) => {
+        setData(prevdata => ({
+            ...prevdata,
+            [name]: value,
+        }));
+    }
+
+
+    const btnn = (e) => {
+        console.log(data)
+        setData({
+            username: "",
+            password: "",
+            netimage: "",
+        });
+    }
 
     useFocusEffect(
         React.useCallback(() => {
@@ -49,15 +73,30 @@ const HomeScreen = () => {
 
                 <View style={styles.form}>
                     <Text style={styles.inptxt}>User Name</Text>
-                    <TextInput placeholder='Enter Username' style={styles.inp} />
+                    <TextInput
+                        onChangeText={(text) => handleInputChange('username', text)}
+                        value={data.username}
+                        placeholder='Enter Username'
+                        style={styles.inp}
+                    />
 
                     <Text style={styles.inptxt}>Password</Text>
-                    <TextInput placeholder='Enter Password' style={styles.inp} secureTextEntry />
+                    <TextInput
+                        onChangeText={(text) => handleInputChange('password', text)}
+                        value={data.password}
+                        placeholder='Enter password'
+                        style={styles.inp}
+                    />
 
                     <Text style={styles.inptxt}>Network Image</Text>
-                    <TextInput placeholder="Enter sites's logo uri  " style={styles.inp} />
+                    <TextInput
+                        onChangeText={(text) => handleInputChange('netimage', text)}
+                        value={data.netimage}
+                        placeholder='Enter Username'
+                        style={styles.inp}
+                    />
 
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={btnn}>
                         <View style={styles.button}>
                             <Text style={styles.buttonText}>Save</Text>
                         </View>
