@@ -1,12 +1,17 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, Dimensions, ScrollView, ToastAndroid, BackHandler } from 'react-native';
+import db, { createTable, insertData } from '../service/db'; // Adjust the import path as necessary
 
 const { width, height } = Dimensions.get('screen');
 
 const HomeScreen = () => {
-
     const stack = useNavigation();
+
+    useEffect(() => {
+        createTable();
+    }, []);
+
     const a = "https://cdn.pixabay.com/photo/2016/11/18/11/16/instagram-1834010_1280.png";
 
     const [data, setData] = useState({
@@ -15,37 +20,35 @@ const HomeScreen = () => {
         netimage: "",
     });
 
-
-
     const handleInputChange = (name, value) => {
         setData(prevdata => ({
             ...prevdata,
             [name]: value,
         }));
-    }
+    };
 
-
-    const btnn = (e) => {
-        console.log(data)
+    const handleAdd = () => {
+        insertData(data.username, data.password, data.netimage);
+        ToastAndroid.show("Data inserted successfully", ToastAndroid.SHORT);
         setData({
             username: "",
             password: "",
             netimage: "",
         });
-    }
+    };
 
     useFocusEffect(
         React.useCallback(() => {
             const onBackPress = () => {
-                ToastAndroid.show("You can't go back", ToastAndroid.SHORT)
+                ToastAndroid.show("You can't go back", ToastAndroid.SHORT);
                 return true;
-            }
+            };
 
             BackHandler.addEventListener("hardwareBackPress", onBackPress);
 
             return () => {
-                BackHandler.removeEventListener('hardwareBackPress', () => stack.goBack());
-            }
+                BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+            };
         }, [stack])
     );
 
@@ -54,11 +57,9 @@ const HomeScreen = () => {
             behavior={Platform.OS === "android" ? "padding" : "height"}
             style={styles.container}
         >
-            {/* appbar */}
             <View style={styles.appbar}>
                 <Text style={styles.txt}>Cipher</Text>
             </View>
-            {/* appbar */}
 
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.welcomeBox}>
@@ -92,11 +93,11 @@ const HomeScreen = () => {
                     <TextInput
                         onChangeText={(text) => handleInputChange('netimage', text)}
                         value={data.netimage}
-                        placeholder='Enter Username'
+                        placeholder='Enter Network Image URL'
                         style={styles.inp}
                     />
 
-                    <TouchableOpacity onPress={btnn}>
+                    <TouchableOpacity onPress={handleAdd}>
                         <View style={styles.button}>
                             <Text style={styles.buttonText}>Save</Text>
                         </View>
@@ -105,7 +106,7 @@ const HomeScreen = () => {
             </ScrollView>
         </KeyboardAvoidingView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
