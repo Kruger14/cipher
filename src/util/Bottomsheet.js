@@ -1,48 +1,61 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, ToastAndroid } from 'react-native';
+import { updateData } from '../service/db';
 
-const BottomSheet = () => {
-    const [network, setNetwork] = useState('');
-    const [imageUsername, setImageUsername] = useState('');
-    const [password, setPassword] = useState('');
+const BottomSheet = ({ onClose, ID }) => {
 
-    const handleUpdate = () => {
-        // Handle the update logic here
-        console.log('Network:', network);
-        console.log('Image Username:', imageUsername);
-        console.log('Password:', password);
+    const [data, setData] = useState({
+        username: "",
+        password: "",
+        netimageurl: "",
+    });
+
+    const handleUpdate = (name, value) => {
+        setData(prev => ({
+            ...prev,
+            [name]: value,
+        }))
     };
 
+    const updateButton = () => {
+        console.log("upadte running")
+        const id = ID;
+        updateData(data.username, data.password, data.netimageurl, id),
+            setData({ username: "", password: "", netimageurl: "" })
+        closeSheet();
+        ToastAndroid.show('Record updated', ToastAndroid.SHORT);
+    }
+
     const closeSheet = () => {
-        // Logic to close the bottom sheet
-        console.log('Closing sheet');
+        onClose.current.close()
     };
 
     return (
         <View style={styles.container}>
             <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Update Information</Text>
+
                 <TextInput
                     style={styles.input}
-                    placeholder="Network"
-                    value={network}
-                    onChangeText={setNetwork}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Image Username"
-                    value={imageUsername}
-                    onChangeText={setImageUsername}
+                    placeholder="Username"
+                    value={data.username}
+                    onChangeText={(text) => handleUpdate('username', text)}
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Password"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry
+                    value={data.password}
+                    onChangeText={(text) => handleUpdate('password', text)}
+                />
+
+                <TextInput
+                    style={styles.input}
+                    placeholder="Network image"
+                    value={data.netimageurl}
+                    onChangeText={(text) => handleUpdate('netimageurl', text)}
                 />
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.updateButton} onPress={handleUpdate}>
+                    <TouchableOpacity style={styles.updateButton} onPress={updateButton}>
                         <Text style={styles.buttonText}>Update</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.cancelButton} onPress={closeSheet}>

@@ -41,9 +41,9 @@ export const insertData = (username, password, netimage) => {
     });
 };
 
-export const updateData = () => {
+export const updateData = (username, password, netimageurl, id) => {
     db.transaction(tx => {
-        tx.executeSql(`UPDATE PASSWORDS SET username = ?, password = ?, netimageurL = ? WHERE ID = ?`), [username, password, netimageurl, id],
+        tx.executeSql(`UPDATE PASSWORDS SET username = ?, password = ?, netimageurL = ? WHERE ID = ?`, [username, password, netimageurl, id]),
             () => {
                 console.log('updated');
             },

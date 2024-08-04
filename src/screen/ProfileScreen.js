@@ -30,7 +30,6 @@ const Profilescreen = () => {
                         />
                     </View>
                     <Text style={styles.ownerName}>Martina Alex</Text>
-                    <Text style={styles.ownerEmail}>martina.alex2015@gmail.com</Text>
                 </View>
 
                 <View style={styles.cardContainer}>

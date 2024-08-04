@@ -1,19 +1,37 @@
 import React, { useRef } from 'react';
-import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Image, Text, TouchableOpacity, StyleSheet, ToastAndroid } from 'react-native';
 import { PencilSquareIcon, TrashIcon } from 'react-native-heroicons/outline';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Bottomsheet from './Bottomsheet';
+import { deleteData } from '../service/db';
 
-const PasswordCard = () => {
+const PasswordCard = ({ attr }) => {
     const refRBSheet = useRef();
+
+
+    // Function to check if the URL is valid
+    const isValidImageUrl = (url) => {
+        return url && /^https?:\/\/.+\.(jpg|jpeg|png|gif)$/.test(url);
+    };
+
+    const deleteButton = () => {
+        deleteData(attr.ID)
+        ToastAndroid.show('Record Deleted', ToastAndroid.SHORT)
+    };
 
     return (
         <>
             <View style={styles.container}>
-                <Image source={require('../assets/img.png')} style={styles.image} />
+                {isValidImageUrl(attr.netimageurL) ? (
+                    <Image source={{ uri: attr.netimageurL }} style={styles.image} />
+                ) : (
+                    <View style={styles.noImageContainer}>
+                        <Text style={styles.noImageText}>{attr.netimageurL}</Text>
+                    </View>
+                )}
                 <View style={styles.userInfo}>
-                    <Text style={styles.username}>Username</Text>
-                    <Text style={styles.userBio}>bio</Text>
+                    <Text style={styles.username}>{attr.username}</Text>
+                    <Text style={styles.userBio}>{attr.password}</Text>
                 </View>
                 <View style={styles.buttonsContainer}>
                     <TouchableOpacity
@@ -21,11 +39,12 @@ const PasswordCard = () => {
                         style={[styles.button, styles.editButton]}
                         accessibilityLabel="Edit Password"
                     >
-                        <PencilSquareIcon color={'black'} height={24} width={24} />
+                        <PencilSquareIcon color={'white'} height={24} width={24} />
                         <Text style={styles.editButtonText}>Edit</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, styles.deleteButton]} accessibilityLabel="Delete Password">
-                        <TrashIcon color={'black'} height={24} width={24} />
+
+                    <TouchableOpacity onPress={deleteButton} style={[styles.button, styles.deleteButton]} accessibilityLabel="Delete Password">
+                        <TrashIcon color={'white'} height={24} width={24} />
                         <Text style={styles.deleteButtonText}>Delete</Text>
                     </TouchableOpacity>
                 </View>
@@ -51,7 +70,7 @@ const PasswordCard = () => {
                     },
                 }}
             >
-                <Bottomsheet />
+                <Bottomsheet onClose={refRBSheet} ID={attr.ID} />
             </RBSheet>
         </>
     );
@@ -78,12 +97,28 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         marginRight: 16,
     },
+    noImageContainer: {
+        width: 64,
+        height: 64,
+        borderRadius: 16,
+        overflow: 'hidden',
+        marginRight: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#e0e0e0',
+    },
+    noImageText: {
+        color: '#888',
+        fontSize: 14,
+        textAlign: 'center',
+    },
     userInfo: {
         flex: 1,
     },
     username: {
         fontSize: 18,
         fontWeight: 'bold',
+        color: '#333',
     },
     userBio: {
         color: '#999',
@@ -103,13 +138,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#337ab7',
     },
     editButtonText: {
-        color: 'black',
+        color: 'white',
+        marginLeft: 8,
     },
     deleteButton: {
         backgroundColor: '#c0392b',
     },
     deleteButtonText: {
-        color: 'black',
+        color: 'white',
+        marginLeft: 8,
     },
 });
 

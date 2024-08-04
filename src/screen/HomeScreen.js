@@ -12,13 +12,15 @@ const HomeScreen = () => {
         createTable();
     }, []);
 
-    const a = "https://cdn.pixabay.com/photo/2016/11/18/11/16/instagram-1834010_1280.png";
 
     const [data, setData] = useState({
         username: "",
         password: "",
         netimage: "",
     });
+
+
+
 
     const handleInputChange = (name, value) => {
         setData(prevdata => ({
@@ -52,6 +54,10 @@ const HomeScreen = () => {
         }, [stack])
     );
 
+    const isValidImageUrl = (url) => {
+        return url && /^https?:\/\/.+\.(jpg|jpeg|png|gif)$/.test(url);
+    };
+
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "android" ? "padding" : "height"}
@@ -68,8 +74,18 @@ const HomeScreen = () => {
                     <Text style={styles.saying}>Keep your Passwords safe with Cipher</Text>
                 </View>
 
+                {/* image preview */}
                 <View style={styles.imgView}>
-                    <Image source={{ uri: a }} style={styles.img} />
+                    <Text style={styles.txt}>Image Preview</Text>
+                    {isValidImageUrl(data.netimage) ? (
+                        < Image source={{ uri: data.netimage }} style={styles.img} />
+                    ) :
+                        (
+                            <View style={styles.noImageContainer}>
+                                <Text style={styles.noImageText}>{data.netimage}</Text>
+                            </View>
+                        )
+                    }
                 </View>
 
                 <View style={styles.form}>
@@ -157,8 +173,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: width * 0.025,
     },
     img: {
-        height: height * 0.25,
-        width: height * 0.25,
+        height: 150,
+        width: 150,
+        objectFit: 'fill',
     },
     inptxt: {
         color: 'black',
@@ -168,7 +185,7 @@ const styles = StyleSheet.create({
     imgView: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal: width * 0.04,
+        marginTop: height * 0.05,
     },
     button: {
         padding: width * 0.025,
@@ -181,6 +198,22 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',
+    },
+    noImageContainer: {
+        marginTop: height * 0.01,
+        width: 64,
+        height: 64,
+        borderRadius: 16,
+        overflow: 'hidden',
+        marginRight: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#e0e0e0',
+    },
+    noImageText: {
+        color: '#888',
+        fontSize: 14,
+        textAlign: 'center',
     },
 });
 
