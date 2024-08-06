@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
@@ -7,23 +8,39 @@ const SplashScreen = () => {
     const circleonee = useSharedValue(0);
     const circletwoo = useSharedValue(0);
     const circlethreee = useSharedValue(0);
-    const tab = useNavigation();
+    const navigation = useNavigation();
+
+    const getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('name');
+            return value;
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+    };
 
     useEffect(() => {
         setTimeout(() => {
-            circleonee.value = withSpring(1, { stiffness: 80 },);
+            circleonee.value = withSpring(1, { stiffness: 80 });
         }, 300);
 
         setTimeout(() => {
-            circletwoo.value = withSpring(1, { stiffness: 80 })
-        }, 600)
-        setTimeout(() => {
-            circlethreee.value = withSpring(1, { stiffness: 80 });
-        }, 800)
+            circletwoo.value = withSpring(1, { stiffness: 80 });
+        }, 600);
 
         setTimeout(() => {
-            tab.navigate('Onboard')
-        }, 1200)
+            circlethreee.value = withSpring(1, { stiffness: 80 });
+        }, 800);
+
+        setTimeout(async () => {
+            const name = await getData();
+            if (name) {
+                navigation.navigate('Tab');
+            } else {
+                navigation.navigate('Onboard');
+            }
+        }, 1200);
     }, []);
 
     const circleOneStyle = useAnimatedStyle(() => {

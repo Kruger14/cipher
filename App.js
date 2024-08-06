@@ -52,7 +52,7 @@ const App = () => (
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -100}
         >
-            <Stack.Navigator initialRouteName="Tab">
+            <Stack.Navigator initialRouteName="Splash">
                 <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Onboard" component={OnboardScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Tab" component={TabNavigator} options={{ headerShown: false }} />

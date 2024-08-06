@@ -1,24 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Text, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import Video from 'react-native-video';
 import { ChevronRightIcon } from 'react-native-heroicons/outline';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 const { width, height } = Dimensions.get('screen');
 import { BackHandler, ToastAndroid } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const OnboardScreen = () => {
     const stack = useNavigation();
+    const [data, setData] = useState("");
 
+
+    const storedata = async (value) => {
+        try {
+            await AsyncStorage.setItem('name', value)
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
 
     useFocusEffect(
         React.useCallback(() => {
             // Prevent default behavior of going back
+
             const showToast = () => {
                 ToastAndroid.show("you can't go back!", ToastAndroid.SHORT);
                 return true;
             };
 
             BackHandler.addEventListener('hardwareBackPress', showToast);
+
 
             // Cleanup event listener on unmount
             return () => {
@@ -27,17 +40,29 @@ const OnboardScreen = () => {
         }, [stack])
     );
 
+    const textChange = (text) => {
+        setData(text);
+    }
 
+    const goFront = () => {
+        storedata(data);
+        if (data === "") {
+            ToastAndroid.show('Field required', ToastAndroid.SHORT);
+        } else {
+            stack.navigate('Tab')
+        }
+    }
+    console.log("use in onboard", data)
     return (
         <View style={styles.container}>
             {/* Video Background */}
-            <Video
+            {/* <Video
                 source={require("../assets/background.mp4")} // Replace with your video URL
                 style={StyleSheet.absoluteFill}
                 resizeMode="cover"
                 repeat={true}
                 muted={true}
-            />
+            /> */}
 
             {/* Overlay Content */}
             <View style={styles.overlay}>
@@ -54,12 +79,17 @@ const OnboardScreen = () => {
                     </Text>
                 </View>
 
+
+
+
                 <View style={styles.form}>
                     <Text style={styles.inptxt}>User Name</Text>
-                    <TextInput placeholder='Enter your name to display in homepage' style={styles.inp} />
+                    <TextInput placeholder='Enter your name to display in homepage'
+                        style={styles.inp}
+                        value={data} onChangeText={textChange} />
                 </View>
 
-                <TouchableOpacity style={styles.posogbtn} onPress={() => stack.navigate('Tab')}>
+                <TouchableOpacity style={styles.posogbtn} onPress={goFront}>
                     <View style={styles.button} >
                         <ChevronRightIcon color={"black"} height={width * 0.06} width={width * 0.06} />
                     </View>

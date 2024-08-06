@@ -1,12 +1,31 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, Image, Dimensions, ScrollView } from 'react-native';
 import { ChevronRightIcon, ChevronLeftIcon, PlusCircleIcon, BookmarkIcon, ArrowDownOnSquareIcon } from 'react-native-heroicons/outline';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const { width, height } = Dimensions.get('screen');
 
 const Profilescreen = () => {
     const stack = useNavigation();
+    const [data, setData] = useState("");
+
+    const fetchData = async () => {
+        const data = await AsyncStorage.getItem('name');
+        setData(data);
+    }
+
+    fetchData();
+
+    const getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('name');
+            return value;
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+    };
+
     return (
         <>
             {/* appBar start */}
@@ -29,7 +48,7 @@ const Profilescreen = () => {
                             style={styles.profileImage}
                         />
                     </View>
-                    <Text style={styles.ownerName}>Martina Alex</Text>
+                    <Text style={styles.ownerName}>{data}</Text>
                 </View>
 
                 <View style={styles.cardContainer}>
@@ -131,6 +150,7 @@ const styles = StyleSheet.create({
     ownerName: {
         fontSize: width * 0.05,
         fontWeight: '600',
+        color: 'black',
         marginTop: height * 0.01,
     },
     ownerEmail: {

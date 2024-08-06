@@ -2,23 +2,39 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, Dimensions, ScrollView, ToastAndroid, BackHandler } from 'react-native';
 import db, { createTable, insertData } from '../service/db'; // Adjust the import path as necessary
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const { width, height } = Dimensions.get('screen');
 
 const HomeScreen = () => {
     const stack = useNavigation();
-
-    useEffect(() => {
-        createTable();
-    }, []);
-
-
+    const [userData, setUserData] = useState("");
     const [data, setData] = useState({
         username: "",
         password: "",
         netimage: "",
     });
 
+
+
+    useEffect(() => {
+        createTable();
+    }, []);
+
+
+    const clearAll = () => {
+        AsyncStorage.clear();
+        console.log("clear");
+    }
+
+    const getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('name');
+            return value;
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+    };
 
 
 
@@ -48,6 +64,15 @@ const HomeScreen = () => {
 
             BackHandler.addEventListener("hardwareBackPress", onBackPress);
 
+            const fetchData = async () => {
+                const user = await getData();
+                if (user) {
+                    setUserData(user);
+                }
+            };
+
+            fetchData();
+
             return () => {
                 BackHandler.removeEventListener('hardwareBackPress', onBackPress);
             };
@@ -57,7 +82,7 @@ const HomeScreen = () => {
     const isValidImageUrl = (url) => {
         return url && /^https?:\/\/.+\.(jpg|jpeg|png|gif)$/.test(url);
     };
-
+    console.log("use", userData)
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "android" ? "padding" : "height"}
@@ -70,7 +95,7 @@ const HomeScreen = () => {
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.welcomeBox}>
                     <Text style={styles.greet}>Welcome back!</Text>
-                    <Text style={styles.user}>User Name</Text>
+                    <Text style={styles.user}>{userData}</Text>
                     <Text style={styles.saying}>Keep your Passwords safe with Cipher</Text>
                 </View>
 
