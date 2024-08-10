@@ -33,11 +33,10 @@ const AccountScreen = () => {
 
     useEffect(() => {
         selectAll();
-    }, [data])
-
+    }, []);
 
     return (
-        <>
+        <View style={styles.container}>
             {/* appBar start */}
             <View style={styles.appBar}>
                 <TouchableOpacity onPress={() => navigate.navigate('Home')}>
@@ -54,29 +53,28 @@ const AccountScreen = () => {
 
             {/* totalcount */}
             <View style={styles.totalCountContainer}>
-                <View style={styles.txt}>
-                    <Text style={styles.headerTitle}>Passwords saved</Text>
-                </View>
-
-                <View style={styles.txt}>
-                    <Text style={styles.headerTitle}>{data.length}</Text>
-                </View>
+                <Text style={styles.totalCountText}>Passwords saved</Text>
+                <Text style={styles.totalCountNumber}>{data.length}</Text>
             </View>
             {/* totalcount */}
 
             {/* Passwords cards go here */}
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.passwordbox}>
                     {data.map((item) => (
                         <PasswordCard key={item.ID} attr={item} /> // Ensure each item has a unique key
                     ))}
                 </View>
             </ScrollView>
-        </>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
     appBar: {
         marginTop: height * 0.02,
         flexDirection: 'row',
@@ -105,10 +103,24 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: height * 0.015,
-        marginHorizontal: width * 0.04,
+        marginLeft: width * 0.04,
+        marginRight: width * 0.04,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    totalCountText: {
+        fontSize: width * 0.05,
+        fontWeight: 'bold',
+    },
+    totalCountNumber: {
+        fontSize: width * 0.05,
+        fontWeight: 'bold',
+        color: 'blue',
+    },
+    scrollViewContent: {
+        paddingVertical: height * 0.01,
     },
     passwordbox: {
-        paddingTop: height * 0.005,
         paddingBottom: height * 0.06,
     },
 });

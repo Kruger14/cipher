@@ -1,8 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Dimensions } from 'react-native';
 import Animated, { useSharedValue, withSpring, useAnimatedStyle } from 'react-native-reanimated';
+
+const { width, height } = Dimensions.get('screen');
 
 const SplashScreen = () => {
     const circleonee = useSharedValue(0);
@@ -79,28 +81,28 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'black', // Soft background color
+        backgroundColor: 'black',
     },
     txt: {
         fontFamily: 'Georgia',
         fontStyle: 'italic',
         fontWeight: '700',
-        fontSize: 32,
-        color: '#333', // Darker text color for contrast
+        fontSize: width * 0.08,
+        color: '#333',
     },
     circleOne: {
-        backgroundColor: '#4a90e2', // Soft blue color
-        height: 350,
-        width: 350,
-        borderRadius: 175,
+        backgroundColor: '#4a90e2',
+        height: width * 0.9,
+        width: width * 0.9,
+        borderRadius: (width * 0.9) / 2,
         justifyContent: 'center',
         alignItems: 'center',
     },
     circleTwo: {
-        backgroundColor: '#50e3c2', // Soft green color
-        height: 250,
-        width: 250,
-        borderRadius: 125,
+        backgroundColor: '#50e3c2',
+        height: width * 0.65,
+        width: width * 0.65,
+        borderRadius: (width * 0.65) / 2,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -111,11 +113,11 @@ const styles = StyleSheet.create({
         },
         elevation: 5,
         borderWidth: 1,
-        borderColor: '#ddd', // Soft border color
-        backgroundColor: '#f8e71c', // Soft yellow color
-        height: 150,
-        width: 150,
-        borderRadius: 75,
+        borderColor: '#ddd',
+        backgroundColor: '#f8e71c',
+        height: width * 0.4,
+        width: width * 0.4,
+        borderRadius: (width * 0.4) / 2,
         justifyContent: 'center',
         alignItems: 'center',
     },

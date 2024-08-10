@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, Dimensions, ScrollView, ToastAndroid, BackHandler } from 'react-native';
 import db, { createTable, insertData } from '../service/db'; // Adjust the import path as necessary
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const { width, height } = Dimensions.get('screen');
 
 const HomeScreen = () => {
@@ -14,12 +15,9 @@ const HomeScreen = () => {
         netimage: "",
     });
 
-
-
     useEffect(() => {
         createTable();
     }, []);
-
 
     const clearAll = () => {
         AsyncStorage.clear();
@@ -36,8 +34,6 @@ const HomeScreen = () => {
         }
     };
 
-
-
     const handleInputChange = (name, value) => {
         setData(prevdata => ({
             ...prevdata,
@@ -46,8 +42,12 @@ const HomeScreen = () => {
     };
 
     const handleAdd = () => {
-        insertData(data.username, data.password, data.netimage);
-        ToastAndroid.show("Data inserted successfully", ToastAndroid.SHORT);
+        if (data.netimage && data.password && data.username) {
+            insertData(data.username, data.password, data.netimage);
+            ToastAndroid.show("Data inserted successfully", ToastAndroid.SHORT);
+        } else {
+            ToastAndroid.show("You can't leave field blank", ToastAndroid.SHORT);
+        }
         setData({
             username: "",
             password: "",
@@ -82,7 +82,8 @@ const HomeScreen = () => {
     const isValidImageUrl = (url) => {
         return url && /^https?:\/\/.+\.(jpg|jpeg|png|gif)$/.test(url);
     };
-    console.log("use", userData)
+
+
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "android" ? "padding" : "height"}
@@ -97,6 +98,7 @@ const HomeScreen = () => {
                     <Text style={styles.greet}>Welcome back!</Text>
                     <Text style={styles.user}>{userData}</Text>
                     <Text style={styles.saying}>Keep your Passwords safe with Cipher</Text>
+                    <Text style={styles.note}>Note: Images load on active connection</Text>
                 </View>
 
                 {/* image preview */}
@@ -130,7 +132,7 @@ const HomeScreen = () => {
                         style={styles.inp}
                     />
 
-                    <Text style={styles.inptxt}>Network Image</Text>
+                    <Text style={styles.inptxt}>Network Image Or Name Of The Site</Text>
                     <TextInput
                         onChangeText={(text) => handleInputChange('netimage', text)}
                         value={data.netimage}
@@ -152,6 +154,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#F5F5F5',
     },
     appbar: {
         marginTop: height * 0.02,
@@ -161,8 +164,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     txt: {
-        color: "black",
+        color: "#333",
         fontSize: width * 0.06,
+        fontWeight: 'bold',
     },
     welcomeBox: {
         flexDirection: 'column',
@@ -171,19 +175,27 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: width * 0.07,
         borderRadius: 16,
-        backgroundColor: 'rgba(248, 249, 250, 0.8)',
+        backgroundColor: '#FFFFFF',
+        borderColor: '#DDDDDD',
     },
     greet: {
-        color: "black",
-        fontSize: width * 0.04,
+        color: "#333",
+        fontSize: width * 0.05,
+        fontWeight: '600',
+    },
+    note: {
+        marginTop: height * 0.01,
+        color: "#777",
+        fontSize: 12,
     },
     user: {
-        color: "black",
+        color: "#333",
         fontSize: width * 0.06,
+        fontWeight: 'bold',
     },
     saying: {
         fontSize: width * 0.045,
-        color: 'black',
+        color: '#333',
     },
     form: {
         marginHorizontal: width * 0.04,
@@ -192,18 +204,21 @@ const styles = StyleSheet.create({
     inp: {
         borderWidth: 1,
         height: height * 0.05,
-        color: 'black',
+        color: '#333',
         borderRadius: 8,
         marginBottom: height * 0.015,
         paddingHorizontal: width * 0.025,
+        borderColor: '#DDDDDD',
+        backgroundColor: '#FFFFFF',
     },
     img: {
-        height: 150,
-        width: 150,
+        height: 120,
+        width: 120,
         objectFit: 'fill',
+        borderRadius: 8,
     },
     inptxt: {
-        color: 'black',
+        color: '#333',
         fontSize: width * 0.035,
         marginBottom: height * 0.005,
     },
@@ -215,25 +230,24 @@ const styles = StyleSheet.create({
     button: {
         padding: width * 0.025,
         width: width * 0.25,
-        backgroundColor: "blue",
+        backgroundColor: "#007BFF",
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 16,
         marginTop: height * 0.015,
     },
     buttonText: {
-        color: 'white',
+        color: '#FFFFFF',
+        fontWeight: 'bold',
     },
     noImageContainer: {
         marginTop: height * 0.01,
-        width: 64,
-        height: 64,
-        borderRadius: 16,
+        borderRadius: 8,
         overflow: 'hidden',
         marginRight: 16,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#e0e0e0',
+        backgroundColor: '#F0F0F0',
     },
     noImageText: {
         color: '#888',

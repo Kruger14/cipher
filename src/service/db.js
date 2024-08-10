@@ -1,29 +1,27 @@
+import { ToastAndroid } from 'react-native';
 import SQLite from 'react-native-sqlite-storage';
 
 const db = SQLite.openDatabase(
-    { name: 'cipher.db' },
-    () => { console.log('Database opened successfully'); },
-    (error) => { console.log('Error opening database: ', error); }
+    { name: 'cipher.db' }
 );
 
 export const createTable = () => {
-    db.transaction(tx => {
-        tx.executeSql(
-            `CREATE TABLE IF NOT EXISTS PASSWORDS (
-                ID INTEGER PRIMARY KEY AUTOINCREMENT, 
-                username TEXT, 
-                password TEXT, 
-                netimageurL TEXT
-            )`,
-            [],
-            () => {
-                console.log('Table created successfully');
-            },
-            (tx, error) => {
-                console.log('Error creating table: ', error);
-            }
-        );
-    });
+    try {
+        db.transaction(tx => {
+            tx.executeSql(
+                `CREATE TABLE IF NOT EXISTS PASSWORDS (
+                    ID INTEGER PRIMARY KEY AUTOINCREMENT, 
+                    username TEXT, 
+                    password TEXT, 
+                    netimageurL TEXT
+                    )`,
+                [],
+            );
+        });
+    }
+    catch (error) {
+        ToastAndroid.show(error, ToastAndroid.SHORT);
+    }
 };
 
 export const insertData = (username, password, netimage) => {
@@ -35,7 +33,7 @@ export const insertData = (username, password, netimage) => {
                 ToastAndroid.show("Data inserted successfully", ToastAndroid.SHORT);
             },
             (tx, error) => {
-                console.log("Error inserting row: ", error);
+                ToastAndroid.show(error, ToastAndroid.SHORT)
             }
         );
     });
@@ -44,11 +42,8 @@ export const insertData = (username, password, netimage) => {
 export const updateData = (username, password, netimageurl, id) => {
     db.transaction(tx => {
         tx.executeSql(`UPDATE PASSWORDS SET username = ?, password = ?, netimageurL = ? WHERE ID = ?`, [username, password, netimageurl, id]),
-            () => {
-                console.log('updated');
-            },
             (error) => {
-                console.log("message : ", error);
+                ToastAndroid.show(error, ToastAndroid.SHORT)
             }
     })
 
@@ -61,14 +56,14 @@ export const deleteData = (id, callback) => {
             [id],
             (tx, results) => {
                 if (results.rowsAffected > 0) {
-                    console.log('Deleted row ID:', id);
+                    ToastAndroid.show("Row Deleted", ToastAndroid.SHORT)
                     if (callback) callback();
                 } else {
-                    console.log('No row found with ID:', id);
+                    ToastAndroid.show("Record not found", ToastAndroid.SHORT)
                 }
             },
             (tx, error) => {
-                console.log('Error deleting row:', error);
+                ToastAndroid.show(error, ToastAndroid.SHORT)
             }
         );
     });

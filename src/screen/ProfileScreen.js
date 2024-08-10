@@ -1,34 +1,62 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Image, Dimensions, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Text, Dimensions, ScrollView, ToastAndroid } from 'react-native';
 import { ChevronRightIcon, ChevronLeftIcon, PlusCircleIcon, BookmarkIcon, ArrowDownOnSquareIcon } from 'react-native-heroicons/outline';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import db from '../service/db';
+import RNFS from 'react-native-fs';
+
 const { width, height } = Dimensions.get('screen');
 
 const Profilescreen = () => {
     const stack = useNavigation();
     const [data, setData] = useState("");
+    const [obj, setObj] = useState([]);
+
+    useEffect(() => {
+        selectAll();
+        fetchData();
+    }, []);
+
+    const selectAll = () => {
+        db.transaction(tx => {
+            tx.executeSql(
+                'SELECT * FROM PASSWORDS',
+                [],
+                (tx, results) => {
+                    let rows = results.rows;
+                    let temp = [];
+                    for (let i = 0; i < rows.length; i++) {
+                        temp.push(rows.item(i));
+                    }
+                    setObj(temp);
+                },
+                (error) => {
+                    console.log('Error: ', error);
+                }
+            );
+        });
+    };
+
+    const saveObject = async () => {
+        const jsonString = JSON.stringify(data, null, 2);
+        const path = `${RNFS.DocumentDirectoryPath}/cipher.txt`;
+
+        try {
+            await RNFS.writeFile(path, jsonString, 'utf8');
+            ToastAndroid.show(`Stored in ${path}`, ToastAndroid.SHORT);
+        } catch (error) {
+            console.error('Error saving object:', error);
+        }
+    };
 
     const fetchData = async () => {
         const data = await AsyncStorage.getItem('name');
         setData(data);
-    }
-
-    fetchData();
-
-    const getData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('name');
-            return value;
-        } catch (err) {
-            console.log(err);
-            return null;
-        }
     };
 
     return (
         <>
-            {/* appBar start */}
             <View style={styles.appBar}>
                 <TouchableOpacity onPress={() => { stack.navigate('Home') }}>
                     <View style={styles.iconWrapper}>
@@ -36,26 +64,18 @@ const Profilescreen = () => {
                     </View>
                 </TouchableOpacity>
             </View>
-            {/* appBar end */}
 
-            {/* mainContainer */}
             <View style={styles.mainContainer}>
                 <View style={styles.header}>
                     <Text style={styles.headerTitle}>Profile</Text>
-                    <View style={styles.profileWrapper}>
-                        <Image
-                            source={require("../assets/img.png")}
-                            style={styles.profileImage}
-                        />
-                    </View>
+                    <Text style={styles.subheaderTitle}>Securely Store and manage your</Text>
+                    <Text style={styles.subheaderTitle}>Passwords with ease</Text>
                     <Text style={styles.ownerName}>{data}</Text>
                 </View>
 
                 <View style={styles.cardContainer}>
                     <ScrollView showsVerticalScrollIndicator={false}>
-                        {/* settingsList  start*/}
                         <View style={styles.settingsList}>
-
                             <TouchableOpacity onPress={() => { stack.navigate('Home') }} style={styles.settingsItem}>
                                 <View style={styles.settingsItemin}>
                                     <PlusCircleIcon color={"black"} width={width * 0.06} height={width * 0.06} />
@@ -72,21 +92,20 @@ const Profilescreen = () => {
                                 <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.settingsItem}>
+                            <TouchableOpacity style={styles.settingsItem} onPress={saveObject}>
                                 <View style={styles.settingsItemin}>
                                     <ArrowDownOnSquareIcon color={"black"} width={width * 0.06} height={width * 0.06} />
                                     <Text style={styles.settingsText}>Save as JSON file</Text>
                                 </View>
                                 <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
                             </TouchableOpacity>
-                            {/* settingsList  end*/}
                         </View>
                     </ScrollView>
                 </View>
-            </View >
+            </View>
         </>
     );
-}
+};
 
 const styles = StyleSheet.create({
     appBar: {
@@ -103,11 +122,6 @@ const styles = StyleSheet.create({
         padding: width * 0.03,
         elevation: 1,
         borderRadius: 100,
-    },
-    detailText: {
-        fontSize: width * 0.05,
-        color: 'black',
-        fontWeight: '300',
     },
     mainContainer: {
         flex: 1,
@@ -126,35 +140,18 @@ const styles = StyleSheet.create({
         color: 'black',
         marginBottom: height * 0.02,
     },
-    profileWrapper: {
-        position: 'relative',
-        marginBottom: height * 0.02,
-    },
-    profileImage: {
-        width: width * 0.24,
-        height: width * 0.24,
-        borderRadius: width * 0.12,
-        borderWidth: 4,
-        borderColor: '#f8f9fa',
-    },
-    status: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        backgroundColor: '#28a745',
-        color: '#fff',
-        borderRadius: width * 0.12,
-        padding: width * 0.01,
-        fontSize: width * 0.03,
+
+    subheaderTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+        fontFamily: 'Arial',
     },
     ownerName: {
         fontSize: width * 0.05,
         fontWeight: '600',
         color: 'black',
         marginTop: height * 0.01,
-    },
-    ownerEmail: {
-        color: '#6c757d',
     },
     cardContainer: {
         justifyContent: "space-evenly",
@@ -175,7 +172,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     settingsList: {
-        spaceVertical: height * 0.02,
+        marginBottom: height * 0.02,
     },
     settingsItem: {
         elevation: 4,
@@ -193,10 +190,6 @@ const styles = StyleSheet.create({
     },
     settingsText: {
         fontSize: width * 0.04,
-    },
-    arrow: {
-        width: width * 0.06,
-        height: width * 0.06,
     },
 });
 

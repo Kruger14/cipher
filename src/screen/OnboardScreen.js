@@ -1,39 +1,33 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, TextInput, TouchableOpacity, Dimensions } from 'react-native';
+import { View, StyleSheet, Text, TextInput, TouchableOpacity, Dimensions, BackHandler, ToastAndroid } from 'react-native';
 import Video from 'react-native-video';
 import { ChevronRightIcon } from 'react-native-heroicons/outline';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-const { width, height } = Dimensions.get('screen');
-import { BackHandler, ToastAndroid } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const { width, height } = Dimensions.get('screen');
 
 const OnboardScreen = () => {
     const stack = useNavigation();
     const [data, setData] = useState("");
 
-
-    const storedata = async (value) => {
+    const storeData = async (value) => {
         try {
-            await AsyncStorage.setItem('name', value)
+            await AsyncStorage.setItem('name', value);
+        } catch (err) {
+            console.log(err);
         }
-        catch (err) {
-            console.log(err)
-        }
-    }
+    };
 
     useFocusEffect(
         React.useCallback(() => {
-            // Prevent default behavior of going back
-
             const showToast = () => {
-                ToastAndroid.show("you can't go back!", ToastAndroid.SHORT);
+                ToastAndroid.show("You can't go back!", ToastAndroid.SHORT);
                 return true;
             };
 
             BackHandler.addEventListener('hardwareBackPress', showToast);
 
-
-            // Cleanup event listener on unmount
             return () => {
                 BackHandler.removeEventListener('hardwareBackPress', showToast);
             };
@@ -42,36 +36,32 @@ const OnboardScreen = () => {
 
     const textChange = (text) => {
         setData(text);
-    }
+    };
 
     const goFront = () => {
-        storedata(data);
+        storeData(data);
         if (data === "") {
             ToastAndroid.show('Field required', ToastAndroid.SHORT);
         } else {
-            stack.navigate('Tab')
+            stack.navigate('Tab');
         }
-    }
-    console.log("use in onboard", data)
+    };
+
     return (
         <View style={styles.container}>
-            {/* Video Background */}
-            {/* <Video
-                source={require("../assets/background.mp4")} // Replace with your video URL
+            <Video
+                source={require("../assets/background.mp4")}
                 style={StyleSheet.absoluteFill}
                 resizeMode="cover"
                 repeat={true}
                 muted={true}
-            /> */}
+            />
 
-            {/* Overlay Content */}
             <View style={styles.overlay}>
-                {/* appbar */}
                 <View style={styles.appbar}>
                     <Text style={styles.txt}>Thank you for installing Cipher,</Text>
                     <Text style={styles.txt}>placing your trust in us</Text>
                 </View>
-                {/* appbar */}
 
                 <View style={styles.welcomeBox}>
                     <Text style={styles.welcomeText}>
@@ -79,25 +69,29 @@ const OnboardScreen = () => {
                     </Text>
                 </View>
 
-
-
+                <View style={styles.note}>
+                    <Text>Note: You cannot change this name later</Text>
+                </View>
 
                 <View style={styles.form}>
                     <Text style={styles.inptxt}>User Name</Text>
-                    <TextInput placeholder='Enter your name to display in homepage'
+                    <TextInput
+                        placeholder='Enter your name to display on the homepage'
                         style={styles.inp}
-                        value={data} onChangeText={textChange} />
+                        value={data}
+                        onChangeText={textChange}
+                    />
                 </View>
 
                 <TouchableOpacity style={styles.posogbtn} onPress={goFront}>
-                    <View style={styles.button} >
+                    <View style={styles.button}>
                         <ChevronRightIcon color={"black"} height={width * 0.06} width={width * 0.06} />
                     </View>
                 </TouchableOpacity>
             </View>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -128,30 +122,40 @@ const styles = StyleSheet.create({
         marginHorizontal: width * 0.04,
         borderWidth: 1,
         borderColor: '#ddd',
-        backgroundColor: 'rgba(248, 249, 250, 0.8)', // Changed to a lighter gray with opacity for better readability
+        backgroundColor: 'rgba(248, 249, 250, 0.8)',
         padding: width * 0.07,
         borderRadius: 16,
     },
+    note: {
+        flexDirection: 'column',
+        marginTop: height * 0.02,
+        padding: width * 0.04,
+        borderWidth: 1,
+        borderColor: '#ddd',
+        backgroundColor: 'rgba(248, 249, 250, 0.8)',
+        borderRadius: 16,
+        color: "black",
+    },
     welcomeText: {
         color: "black",
-        fontSize: width * 0.045, // Slightly larger font size for better readability
+        fontSize: width * 0.045,
         textAlign: 'center',
     },
     inp: {
         borderWidth: 1,
         borderColor: '#ddd',
-        height: height * 0.06, // Made height relative to screen height
+        height: height * 0.06,
         color: 'black',
-        width: width - 30,
+        width: width * 0.9,
         borderRadius: 8,
         marginBottom: height * 0.015,
         paddingHorizontal: width * 0.025,
-        backgroundColor: '#fff', // Added background color for better readability
+        backgroundColor: '#fff',
     },
     inptxt: {
         color: 'black',
-        fontSize: width * 0.04, // Increased font size slightly
-        marginBottom: height * 0.01, // Increased margin for better spacing
+        fontSize: width * 0.04,
+        marginBottom: height * 0.01,
     },
     form: {
         marginTop: height * 0.05,
