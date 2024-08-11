@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, ToastAndroid } from 'react-native';
 import { updateData } from '../service/db';
+const { width, height } = Dimensions.get('screen');
 
 const BottomSheet = ({ onClose, ID }) => {
 
@@ -33,26 +34,38 @@ const BottomSheet = ({ onClose, ID }) => {
         <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Update Information</Text>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Username"
-                value={data.username}
-                onChangeText={(text) => handleUpdate('username', text)}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                value={data.password}
-                onChangeText={(text) => handleUpdate('password', text)}
-                secureTextEntry={true}
-            />
+            <View style={styles.textContainer}>
+                <Text style={styles.label}>Username</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Username"
+                    value={data.username}
+                    onChangeText={(text) => handleUpdate('username', text)}
+                />
+            </View>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Network image"
-                value={data.netimageurl}
-                onChangeText={(text) => handleUpdate('netimageurl', text)}
-            />
+            <View style={styles.textContainer}>
+                <Text style={styles.label}>Password</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    value={data.password}
+                    onChangeText={(text) => handleUpdate('password', text)}
+                    secureTextEntry={true}
+                />
+            </View>
+
+
+
+            <View style={styles.textContainer}>
+                <Text style={styles.label}>Network image Or site name</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Network image"
+                    value={data.netimageurl}
+                    onChangeText={(text) => handleUpdate('netimageurl', text)}
+                />
+            </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.updateButton} onPress={updateButton}>
                     <Text style={styles.buttonText}>Update</Text>
@@ -92,6 +105,17 @@ const styles = StyleSheet.create({
         color: 'black',
         fontWeight: '400',
     },
+
+    label: {
+        color: 'black',
+        fontSize: width * 0.04,
+    },
+
+    textContainer: {
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start'
+    },
+
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',

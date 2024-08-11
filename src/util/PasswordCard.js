@@ -69,6 +69,7 @@ const PasswordCard = ({ attr }) => {
                 closeOnDragDown={true}
                 closeOnPressMask={true}
                 closeOnPressBack={true}
+                height={width * 0.9}
                 customStyles={{
                     wrapper: {
                         backgroundColor: 'rgba(0,0,0,0.5)',
