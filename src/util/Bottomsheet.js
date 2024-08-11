@@ -57,6 +57,7 @@ const BottomSheet = ({ onClose, ID }) => {
                 <TouchableOpacity style={styles.updateButton} onPress={updateButton}>
                     <Text style={styles.buttonText}>Update</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.cancelButton} onPress={closeSheet}>
                     <Text style={styles.buttonText}>Cancel</Text>
                 </TouchableOpacity>
@@ -79,6 +80,7 @@ const styles = StyleSheet.create({
     modalTitle: {
         fontSize: 18,
         marginBottom: 10,
+        color: 'black',
     },
     input: {
         width: Dimensions.get('screen').width - 50,
@@ -87,6 +89,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginBottom: 10,
         paddingHorizontal: 10,
+        color: 'black',
+        fontWeight: '400',
     },
     buttonContainer: {
         flexDirection: 'row',
