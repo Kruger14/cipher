@@ -130,6 +130,7 @@ const HomeScreen = () => {
                         value={data.password}
                         placeholder='Enter password'
                         style={styles.inp}
+                        secureTextEntry={true}
                     />
 
                     <Text style={styles.inptxt}>Network Image Or Name Of The Site</Text>

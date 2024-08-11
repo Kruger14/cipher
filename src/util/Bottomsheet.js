@@ -18,7 +18,6 @@ const BottomSheet = ({ onClose, ID }) => {
     };
 
     const updateButton = () => {
-        console.log("upadte running")
         const id = ID;
         updateData(data.username, data.password, data.netimageurl, id),
             setData({ username: "", password: "", netimageurl: "" })
@@ -31,49 +30,46 @@ const BottomSheet = ({ onClose, ID }) => {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.modalContent}>
-                <Text style={styles.modalTitle}>Update Information</Text>
+        <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Update Information</Text>
 
-                <TextInput
-                    style={styles.input}
-                    placeholder="Username"
-                    value={data.username}
-                    onChangeText={(text) => handleUpdate('username', text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    value={data.password}
-                    onChangeText={(text) => handleUpdate('password', text)}
-                />
+            <TextInput
+                style={styles.input}
+                placeholder="Username"
+                value={data.username}
+                onChangeText={(text) => handleUpdate('username', text)}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Password"
+                value={data.password}
+                onChangeText={(text) => handleUpdate('password', text)}
+                secureTextEntry={true}
+            />
 
-                <TextInput
-                    style={styles.input}
-                    placeholder="Network image"
-                    value={data.netimageurl}
-                    onChangeText={(text) => handleUpdate('netimageurl', text)}
-                />
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.updateButton} onPress={updateButton}>
-                        <Text style={styles.buttonText}>Update</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.cancelButton} onPress={closeSheet}>
-                        <Text style={styles.buttonText}>Cancel</Text>
-                    </TouchableOpacity>
-                </View>
+            <TextInput
+                style={styles.input}
+                placeholder="Network image"
+                value={data.netimageurl}
+                onChangeText={(text) => handleUpdate('netimageurl', text)}
+            />
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.updateButton} onPress={updateButton}>
+                    <Text style={styles.buttonText}>Update</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.cancelButton} onPress={closeSheet}>
+                    <Text style={styles.buttonText}>Cancel</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
+
+    modalContent: {
         flexDirection: 'column',
         justifyContent: 'center',
-    },
-    modalContent: {
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
@@ -114,7 +110,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        color: 'white',
+        color: 'black',
         fontWeight: 'bold',
     },
 });

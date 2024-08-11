@@ -49,6 +49,7 @@ const OnboardScreen = () => {
 
     return (
         <View style={styles.container}>
+
             <Video
                 source={require("../assets/background.mp4")}
                 style={StyleSheet.absoluteFill}
@@ -154,8 +155,8 @@ const styles = StyleSheet.create({
     },
     inptxt: {
         color: 'black',
-        fontSize: width * 0.04,
-        marginBottom: height * 0.01,
+        fontSize: 12,
+        marginBottom: 2,
     },
     form: {
         marginTop: height * 0.05,

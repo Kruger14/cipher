@@ -1,10 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Dimensions, ScrollView, ToastAndroid } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, Dimensions, ScrollView, ToastAndroid, PermissionsAndroid, Platform } from 'react-native';
 import { ChevronRightIcon, ChevronLeftIcon, PlusCircleIcon, BookmarkIcon, ArrowDownOnSquareIcon } from 'react-native-heroicons/outline';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import db from '../service/db';
 import RNFS from 'react-native-fs';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { UserCircleIcon } from "react-native-heroicons/outline";
 
 const { width, height } = Dimensions.get('screen');
 
@@ -38,13 +40,47 @@ const Profilescreen = () => {
         });
     };
 
+    const requestStoragePermission = async () => {
+        try {
+            if (Platform.OS === 'android') {
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                    {
+                        title: 'Storage Permission',
+                        message: 'App needs access to your storage to download files.',
+                        buttonNeutral: 'Ask Me Later',
+                        buttonNegative: 'Cancel',
+                        buttonPositive: 'OK',
+                    },
+                );
+                console.log('Storage Permission:', granted);
+                return granted === PermissionsAndroid.RESULTS.GRANTED;
+            } else {
+                const result = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
+                console.log('Photo Library Permission:', result);
+                return result === RESULTS.GRANTED;
+            }
+        } catch (err) {
+            ToastAndroid.show(err, ToastAndroid.SHORT)
+            console.log('Error requesting permission:', err);
+            return false;
+        }
+    };
+
     const saveObject = async () => {
-        const jsonString = JSON.stringify(data, null, 2);
-        const path = `${RNFS.DocumentDirectoryPath}/cipher.txt`;
+        const hasPermission = await requestStoragePermission();
+        if (!hasPermission) {
+            ToastAndroid.show('Storage permission denied', ToastAndroid.SHORT);
+            return;
+        }
+
+        const jsonString = JSON.stringify(obj, null, 2);
+        const path = `${RNFS.DownloadDirectoryPath}/cipher.txt`;
 
         try {
             await RNFS.writeFile(path, jsonString, 'utf8');
             ToastAndroid.show(`Stored in ${path}`, ToastAndroid.SHORT);
+            console.log(`File stored in ${path}`);
         } catch (error) {
             console.error('Error saving object:', error);
         }
@@ -56,7 +92,7 @@ const Profilescreen = () => {
     };
 
     return (
-        <>
+        <View style={styles.container}>
             <View style={styles.appBar}>
                 <TouchableOpacity onPress={() => { stack.navigate('Home') }}>
                     <View style={styles.iconWrapper}>
@@ -70,6 +106,7 @@ const Profilescreen = () => {
                     <Text style={styles.headerTitle}>Profile</Text>
                     <Text style={styles.subheaderTitle}>Securely Store and manage your</Text>
                     <Text style={styles.subheaderTitle}>Passwords with ease</Text>
+                    <UserCircleIcon height={width * 0.4} width={width * 0.4} color={"black"} />
                     <Text style={styles.ownerName}>{data}</Text>
                 </View>
 
@@ -103,11 +140,12 @@ const Profilescreen = () => {
                     </ScrollView>
                 </View>
             </View>
-        </>
+        </View >
     );
 };
 
 const styles = StyleSheet.create({
+    container: { flex: 1 },
     appBar: {
         marginTop: height * 0.02,
         flexDirection: 'row',
@@ -129,22 +167,21 @@ const styles = StyleSheet.create({
         padding: width * 0.04,
     },
     header: {
-        color: '#fff',
+        color: 'black',
         width: '100%',
         borderRadius: 30,
         alignItems: 'center',
     },
     headerTitle: {
         fontSize: width * 0.06,
-        fontWeight: 'bold',
+        fontWeight: '400',
         color: 'black',
         marginBottom: height * 0.02,
     },
 
     subheaderTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#333',
+        fontSize: width * 0.04,
+        color: 'black',
         fontFamily: 'Arial',
     },
     ownerName: {
@@ -190,6 +227,7 @@ const styles = StyleSheet.create({
     },
     settingsText: {
         fontSize: width * 0.04,
+        color: 'black',
     },
 });
 

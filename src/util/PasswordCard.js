@@ -26,7 +26,7 @@ const PasswordCard = ({ attr }) => {
     };
 
     return (
-        <>
+        <View>
             <View style={styles.container}>
                 {isValidImageUrl(attr.netimageurL) ? (
                     <Image source={{ uri: attr.netimageurL }} style={styles.image} />
@@ -86,7 +86,7 @@ const PasswordCard = ({ attr }) => {
             >
                 <Bottomsheet onClose={refRBSheet} ID={attr.ID} />
             </RBSheet>
-        </>
+        </View>
     );
 };
 

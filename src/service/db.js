@@ -25,28 +25,33 @@ export const createTable = () => {
 };
 
 export const insertData = (username, password, netimage) => {
-    db.transaction(tx => {
-        tx.executeSql(
-            `INSERT INTO PASSWORDS (username, password, netimageurL) VALUES (?, ?, ?)`,
-            [username, password, netimage],
-            () => {
-                ToastAndroid.show("Data inserted successfully", ToastAndroid.SHORT);
-            },
-            (tx, error) => {
-                ToastAndroid.show(error, ToastAndroid.SHORT)
-            }
-        );
-    });
+    try {
+        db.transaction(tx => {
+            tx.executeSql(
+                `INSERT INTO PASSWORDS (username, password, netimageurL) VALUES (?, ?, ?)`,
+                [username, password, netimage],
+                () => {
+                    ToastAndroid.show("Data inserted successfully", ToastAndroid.SHORT);
+                },
+            );
+        });
+    } catch (error) {
+        ToastAndroid.show(error, ToastAndroid.SHORT);
+    }
 };
 
 export const updateData = (username, password, netimageurl, id) => {
-    db.transaction(tx => {
-        tx.executeSql(`UPDATE PASSWORDS SET username = ?, password = ?, netimageurL = ? WHERE ID = ?`, [username, password, netimageurl, id]),
-            (error) => {
-                ToastAndroid.show(error, ToastAndroid.SHORT)
-            }
-    })
-
+    try {
+        db.transaction(tx => {
+            tx.executeSql(`UPDATE PASSWORDS SET username = ?, password = ?, netimageurL = ? WHERE ID = ?`, [username, password, netimageurl, id]),
+                (error) => {
+                    ToastAndroid.show(error, ToastAndroid.SHORT)
+                }
+        })
+    }
+    catch (error) {
+        ToastAndroid.show(error, ToastAndroid.SHORT);
+    }
 }
 
 export const deleteData = (id, callback) => {

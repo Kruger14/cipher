@@ -25,7 +25,7 @@ const AccountScreen = () => {
                     setData(temp);
                 },
                 (error) => {
-                    console.log('Error: ', error);
+                    ToastAndroid.show(error, ToastAndroid.SHORT)
                 }
             );
         });
@@ -33,7 +33,7 @@ const AccountScreen = () => {
 
     useEffect(() => {
         selectAll();
-    }, []);
+    }, [data]);
 
     return (
         <View style={styles.container}>
@@ -41,7 +41,7 @@ const AccountScreen = () => {
             <View style={styles.appBar}>
                 <TouchableOpacity onPress={() => navigate.navigate('Home')}>
                     <View style={styles.iconWrapper}>
-                        <ChevronLeftIcon color={"blue"} height={width * 0.06} width={width * 0.06} />
+                        <ChevronLeftIcon color={"black"} height={width * 0.06} width={width * 0.06} />
                     </View>
                 </TouchableOpacity>
 
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         padding: width * 0.03,
         elevation: 1,
-        borderRadius: 100,
+        borderRadius: 50,
     },
     headerTitle: {
         fontSize: width * 0.06,
