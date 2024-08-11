@@ -4,7 +4,6 @@ import { updateData } from '../service/db';
 const { width, height } = Dimensions.get('screen');
 
 const BottomSheet = ({ onClose, ID }) => {
-
     const [data, setData] = useState({
         username: "",
         password: "",
@@ -15,19 +14,19 @@ const BottomSheet = ({ onClose, ID }) => {
         setData(prev => ({
             ...prev,
             [name]: value,
-        }))
+        }));
     };
 
     const updateButton = () => {
         const id = ID;
-        updateData(data.username, data.password, data.netimageurl, id),
-            setData({ username: "", password: "", netimageurl: "" })
+        updateData(data.username, data.password, data.netimageurl, id);
+        setData({ username: "", password: "", netimageurl: "" });
         closeSheet();
         ToastAndroid.show('Record updated', ToastAndroid.SHORT);
-    }
+    };
 
     const closeSheet = () => {
-        onClose.current.close()
+        onClose.close();  // Correct the closing method call
     };
 
     return (
@@ -55,8 +54,6 @@ const BottomSheet = ({ onClose, ID }) => {
                 />
             </View>
 
-
-
             <View style={styles.textContainer}>
                 <Text style={styles.label}>Network image Or site name</Text>
                 <TextInput
@@ -66,6 +63,7 @@ const BottomSheet = ({ onClose, ID }) => {
                     onChangeText={(text) => handleUpdate('netimageurl', text)}
                 />
             </View>
+
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.updateButton} onPress={updateButton}>
                     <Text style={styles.buttonText}>Update</Text>
@@ -80,21 +78,22 @@ const BottomSheet = ({ onClose, ID }) => {
 };
 
 const styles = StyleSheet.create({
-
     modalContent: {
         flexDirection: 'column',
         justifyContent: 'center',
         backgroundColor: 'white',
-        padding: 20,
+        padding: 10,
         borderRadius: 10,
         alignItems: 'center',
         width: '100%',
     },
+
     modalTitle: {
         fontSize: 18,
         marginBottom: 10,
         color: 'black',
     },
+
     input: {
         width: Dimensions.get('screen').width - 50,
         height: 40,
@@ -113,34 +112,37 @@ const styles = StyleSheet.create({
 
     textContainer: {
         justifyContent: 'flex-start',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
     },
 
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '100%',
+        width: "100%",
+        paddingLeft: 10,
+        paddingRight: 10,
+        marginVertical: width * 0.05,
     },
+
     updateButton: {
-        backgroundColor: '#337ab7',
-        padding: 10,
-        borderRadius: 5,
-        flex: 1,
-        marginRight: 5,
-        alignItems: 'center',
+        padding: 15,
+        backgroundColor: "green",
+        borderRadius: 16,
+        elevation: 10,
     },
+
     cancelButton: {
-        backgroundColor: '#c0392b',
-        padding: 10,
-        borderRadius: 5,
-        flex: 1,
-        marginLeft: 5,
-        alignItems: 'center',
+        padding: 15,
+        backgroundColor: "red",
+        borderRadius: 16,
+        elevation: 10,
     },
+
     buttonText: {
         color: 'black',
         fontWeight: 'bold',
     },
+
 });
 
 export default BottomSheet;
