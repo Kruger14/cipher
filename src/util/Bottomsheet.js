@@ -16,14 +16,18 @@ const BottomSheet = ({ onClose, ID }) => {
             ...prev,
             [name]: value,
         }));
-    };
+    }
 
     const updateButton = () => {
         const id = ID;
-        updateData(data.username, data.password, data.netimageurl, id);
-        setData({ username: "", password: "", netimageurl: "" });
-        closeSheet();
-        ToastAndroid.show('Record updated', ToastAndroid.SHORT);
+        if (data.username && data.password && data.netimageurl) {
+            updateData(data.username, data.password, data.netimageurl, id);
+            setData({ username: "", password: "", netimageurl: "" });
+            closeSheet();
+            ToastAndroid.show('Record updated', ToastAndroid.SHORT);
+        } else {
+            ToastAndroid.show("You can't leave field blank", ToastAndroid.SHORT);
+        }
     };
 
     const closeSheet = () => {

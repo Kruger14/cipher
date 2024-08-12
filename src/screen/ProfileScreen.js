@@ -5,7 +5,7 @@ import { ChevronRightIcon, ChevronLeftIcon, PlusCircleIcon, BookmarkIcon, ArrowD
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import db from '../service/db';
 import RNFS from 'react-native-fs';
-import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { request, PERMISSIONS, RESULTS, check } from 'react-native-permissions';
 import { UserCircleIcon } from "react-native-heroicons/outline";
 
 const { width, height } = Dimensions.get('screen');
@@ -43,6 +43,10 @@ const Profilescreen = () => {
     const requestStoragePermission = async () => {
         try {
             if (Platform.OS === 'android') {
+                if (Platform.OS >= 29) {
+                    return true;
+                }
+
                 const granted = await PermissionsAndroid.request(
                     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
                     {
