@@ -5,7 +5,7 @@ import { ChevronRightIcon, ChevronLeftIcon, PlusCircleIcon, BookmarkIcon, ArrowD
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import db from '../service/db';
 import RNFS from 'react-native-fs';
-import { request, PERMISSIONS, RESULTS, check } from 'react-native-permissions';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { UserCircleIcon } from "react-native-heroicons/outline";
 
 const { width, height } = Dimensions.get('screen');
@@ -43,10 +43,9 @@ const Profilescreen = () => {
     const requestStoragePermission = async () => {
         try {
             if (Platform.OS === 'android') {
-                if (Platform.OS >= 29) {
+                if (Platform.Version >= 30) {
                     return true;
                 }
-
                 const granted = await PermissionsAndroid.request(
                     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
                     {
@@ -81,7 +80,6 @@ const Profilescreen = () => {
         try {
             await RNFS.writeFile(path, jsonString, 'utf8');
             ToastAndroid.show(`Stored in ${path}`, ToastAndroid.SHORT);
-            console.log(`File stored in ${path}`);
         } catch (error) {
             console.error('Error saving object:', error);
         }
