@@ -4,6 +4,7 @@ import { updateData } from '../service/db';
 const { width, height } = Dimensions.get('screen');
 
 const BottomSheet = ({ onClose, ID }) => {
+
     const [data, setData] = useState({
         username: "",
         password: "",
@@ -26,7 +27,7 @@ const BottomSheet = ({ onClose, ID }) => {
     };
 
     const closeSheet = () => {
-        onClose.close();  // Correct the closing method call
+        onClose.current.close();
     };
 
     return (
