@@ -17,7 +17,6 @@ const SplashScreen = () => {
             const value = await AsyncStorage.getItem('name');
             return value;
         } catch (err) {
-            console.log(err);
             return null;
         }
     };

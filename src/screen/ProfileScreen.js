@@ -34,7 +34,7 @@ const Profilescreen = () => {
                     setObj(temp);
                 },
                 (error) => {
-                    console.log('Error: ', error);
+                    ToastAndroid.show(error, ToastAndroid.SHORT);
                 }
             );
         });
@@ -81,7 +81,7 @@ const Profilescreen = () => {
             await RNFS.writeFile(path, jsonString, 'utf8');
             ToastAndroid.show(`Stored in ${path}`, ToastAndroid.SHORT);
         } catch (error) {
-            console.error('Error saving object:', error);
+            ToastAndroid.show(error, ToastAndroid.SHORT);
         }
     };
 

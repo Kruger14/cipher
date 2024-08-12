@@ -21,7 +21,6 @@ const HomeScreen = () => {
 
     const clearAll = () => {
         AsyncStorage.clear();
-        console.log("clear");
     }
 
     const getData = async () => {
@@ -29,7 +28,7 @@ const HomeScreen = () => {
             const value = await AsyncStorage.getItem('name');
             return value;
         } catch (err) {
-            console.log(err);
+            ToastAndroid.show(err, ToastAndroid.SHORT);
             return null;
         }
     };
@@ -186,8 +185,9 @@ const styles = StyleSheet.create({
     },
     note: {
         marginTop: height * 0.01,
-        color: "#777",
+        color: "black",
         fontSize: 12,
+        fontWeight: '400',
     },
     user: {
         color: "#333",
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     img: {
         height: 120,
         width: 120,
-        objectFit: 'fill',
+        objectFit: 'scale-down',
         borderRadius: 8,
     },
     inptxt: {

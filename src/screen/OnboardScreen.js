@@ -15,7 +15,7 @@ const OnboardScreen = () => {
         try {
             await AsyncStorage.setItem('name', value);
         } catch (err) {
-            console.log(err);
+            ToastAndroid.show(err, ToastAndroid.SHORT);
         }
     };
 
