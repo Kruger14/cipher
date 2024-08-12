@@ -18,7 +18,7 @@ const Profilescreen = () => {
     useEffect(() => {
         selectAll();
         fetchData();
-    }, []);
+    }, [obj]);
 
     const selectAll = () => {
         db.transaction(tx => {
@@ -53,16 +53,13 @@ const Profilescreen = () => {
                         buttonPositive: 'OK',
                     },
                 );
-                console.log('Storage Permission:', granted);
                 return granted === PermissionsAndroid.RESULTS.GRANTED;
             } else {
                 const result = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
-                console.log('Photo Library Permission:', result);
                 return result === RESULTS.GRANTED;
             }
         } catch (err) {
             ToastAndroid.show(err, ToastAndroid.SHORT)
-            console.log('Error requesting permission:', err);
             return false;
         }
     };
