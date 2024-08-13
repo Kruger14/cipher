@@ -66,7 +66,7 @@ const OnboardScreen = () => {
 
                 <View style={styles.welcomeBox}>
                     <Text style={styles.welcomeText}>
-                        Organize and protect all your passwords with SecureVault. Say goodbye to password fatigue and hello to seamless, secure access.
+                        Organize and protect all your passwords with Cipher. Say goodbye to password fatigue and hello to seamless, secure access.
                     </Text>
                 </View>
 

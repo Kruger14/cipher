@@ -61,7 +61,7 @@ export const deleteData = (id, callback) => {
             [id],
             (tx, results) => {
                 if (results.rowsAffected > 0) {
-                    ToastAndroid.show("Row Deleted", ToastAndroid.SHORT)
+                    ToastAndroid.show("Record Deleted", ToastAndroid.SHORT)
                     if (callback) callback();
                 } else {
                     ToastAndroid.show("Record not found", ToastAndroid.SHORT)

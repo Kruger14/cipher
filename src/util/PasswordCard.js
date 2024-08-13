@@ -18,7 +18,6 @@ const PasswordCard = ({ attr }) => {
 
     const deleteButton = () => {
         deleteData(attr.ID);
-        ToastAndroid.show('Record Deleted', ToastAndroid.SHORT);
     };
 
     const mask = () => {
