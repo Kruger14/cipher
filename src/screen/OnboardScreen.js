@@ -71,7 +71,7 @@ const OnboardScreen = () => {
                 </View>
 
                 <View style={styles.note}>
-                    <Text>Note: You cannot change this name later</Text>
+                    <Text style={styles.noteTxt}>Note: You cannot change this name later</Text>
                 </View>
 
                 <View style={styles.form}>
@@ -135,7 +135,11 @@ const styles = StyleSheet.create({
         borderColor: '#ddd',
         backgroundColor: 'rgba(248, 249, 250, 0.8)',
         borderRadius: 16,
-        color: "black",
+    },
+    noteTxt: {
+        color: "red",
+        fontStyle: 'italic',
+        fontWeight: '300',
     },
     welcomeText: {
         color: "black",
@@ -155,8 +159,9 @@ const styles = StyleSheet.create({
     },
     inptxt: {
         color: 'black',
-        fontSize: 12,
+        fontSize: 16,
         marginBottom: 2,
+        fontWeight: '400',
     },
     form: {
         marginTop: height * 0.05,
