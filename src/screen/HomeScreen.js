@@ -4,7 +4,7 @@ import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvo
 import db, { createTable, insertData } from '../service/db'; // Adjust the import path as necessary
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import IC from '../assets/icon.png';
 const { width, height } = Dimensions.get('screen');
 
 const HomeScreen = () => {
@@ -44,7 +44,6 @@ const HomeScreen = () => {
     const handleAdd = () => {
         if (data.netimage && data.password && data.username) {
             insertData(data.username, data.password, data.netimage);
-            ToastAndroid.show("Data inserted successfully", ToastAndroid.SHORT);
         } else {
             ToastAndroid.show("You can't leave field blank", ToastAndroid.SHORT);
         }
@@ -86,72 +85,78 @@ const HomeScreen = () => {
 
     return (
         <SafeAreaProvider>
-
             <KeyboardAvoidingView
                 behavior={Platform.OS === "android" ? "padding" : "height"}
                 style={styles.container}
             >
-                <View style={styles.appbar}>
-                    <Text style={styles.txt}>Cipher</Text>
-                </View>
-
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={styles.welcomeBox}>
-                        <Text style={styles.greet}>Welcome back!</Text>
-                        <Text style={styles.user}>{userData}</Text>
-                        <Text style={styles.saying}>Keep your Passwords safe with Cipher</Text>
-                        <Text style={styles.note}>Note: Images load on active connection</Text>
+                <View style={styles.overlay}>
+                    <View style={styles.appbar}>
+                        <View>
+                            <Image source={IC} style={styles.icimg} />
+                        </View>
+                        <View>
+                            <Text style={styles.txt}>Cipher</Text>
+                        </View>
                     </View>
 
-                    {/* image preview */}
-                    <View style={styles.imgView}>
-                        <Text style={styles.txt}>Image Preview</Text>
-                        {isValidImageUrl(data.netimage) ? (
-                            < Image source={{ uri: data.netimage }} style={styles.img} />
-                        ) :
-                            (
-                                <View style={styles.noImageContainer}>
-                                    <Text style={styles.noImageText}>{data.netimage}</Text>
+                    <ScrollView >
+                        <View style={styles.welcomeBox}>
+                            <Text style={styles.greet}>Welcome back!</Text>
+                            <Text style={styles.user}>{userData}</Text>
+                            <Text style={styles.saying}>Keep your Passwords safe with Cipher</Text>
+                            <Text style={styles.note}>Note: Images load on active connection</Text>
+                        </View>
+
+                        {/* image preview */}
+                        <View style={styles.imgView}>
+                            <Text style={styles.txt}>Image Preview</Text>
+                            {isValidImageUrl(data.netimage) ? (
+                                < Image source={{ uri: data.netimage }} style={styles.img} />
+                            ) :
+                                (
+                                    <View style={styles.noImageContainer}>
+                                        <Text style={styles.noImageText}>{data.netimage}</Text>
+                                    </View>
+                                )
+                            }
+                        </View>
+
+                        <View style={styles.form}>
+                            <Text style={styles.inptxt}>User Name</Text>
+                            <TextInput
+                                onChangeText={(text) => handleInputChange('username', text)}
+                                value={data.username}
+                                placeholder='Enter Username'
+                                style={styles.inp}
+                            />
+
+                            <Text style={styles.inptxt}>Password</Text>
+                            <TextInput
+                                onChangeText={(text) => handleInputChange('password', text)}
+                                value={data.password}
+                                placeholder='Enter password'
+                                style={styles.inp}
+                                secureTextEntry={true}
+                            />
+
+                            <Text style={styles.inptxt}>Network Image Or Name Of The Site</Text>
+                            <TextInput
+                                onChangeText={(text) => handleInputChange('netimage', text)}
+                                value={data.netimage}
+                                placeholder='Enter Network Image URL'
+                                style={styles.inp}
+                            />
+
+                            <TouchableOpacity style={styles.btnBox} onPress={handleAdd}>
+                                <View style={styles.button}>
+                                    <Text style={styles.buttonText}>Add</Text>
                                 </View>
-                            )
-                        }
-                    </View>
-
-                    <View style={styles.form}>
-                        <Text style={styles.inptxt}>User Name</Text>
-                        <TextInput
-                            onChangeText={(text) => handleInputChange('username', text)}
-                            value={data.username}
-                            placeholder='Enter Username'
-                            style={styles.inp}
-                        />
-
-                        <Text style={styles.inptxt}>Password</Text>
-                        <TextInput
-                            onChangeText={(text) => handleInputChange('password', text)}
-                            value={data.password}
-                            placeholder='Enter password'
-                            style={styles.inp}
-                            secureTextEntry={true}
-                        />
-
-                        <Text style={styles.inptxt}>Network Image Or Name Of The Site</Text>
-                        <TextInput
-                            onChangeText={(text) => handleInputChange('netimage', text)}
-                            value={data.netimage}
-                            placeholder='Enter Network Image URL'
-                            style={styles.inp}
-                        />
-
-                        <TouchableOpacity onPress={handleAdd}>
-                            <View style={styles.button}>
-                                <Text style={styles.buttonText}>Save</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </ScrollView>
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
+                </View>
             </KeyboardAvoidingView>
-        </SafeAreaProvider>
+        </SafeAreaProvider >
     );
 };
 
@@ -159,6 +164,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F5F5F5',
+    },
+    overlay: {
+        flex: 1,
+        backgroundColor: '#baddf0',
     },
     appbar: {
         marginTop: height * 0.02,
@@ -168,18 +177,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     txt: {
-        color: "#333",
+        color: "#05203e",
         fontSize: width * 0.06,
+        fontStyle: 'italic',
         fontWeight: 'bold',
+    },
+    icimg: {
+        width: width * 0.1,
+        height: width * 0.1,
+        borderRadius: (width * 0.4) / 2,
+        objectFit: "contain",
+        marginHorizontal: 5,
     },
     welcomeBox: {
         flexDirection: 'column',
         marginTop: height * 0.02,
         marginHorizontal: width * 0.04,
-        borderWidth: 1,
+        borderWidth: 0.5,
         padding: width * 0.07,
         borderRadius: 16,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'yellow',
         borderColor: '#DDDDDD',
     },
     greet: {
@@ -221,20 +238,27 @@ const styles = StyleSheet.create({
         width: 120,
         objectFit: 'scale-down',
         borderRadius: 8,
+        backgroundColor: 'yelow',
     },
     inptxt: {
         color: '#333',
         fontSize: width * 0.035,
         marginBottom: height * 0.005,
+        fontWeight: '700',
     },
     imgView: {
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: height * 0.05,
     },
+    btnBox: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     button: {
         padding: width * 0.025,
-        width: width - 50,
+        width: width / 1.20,
         backgroundColor: "#007BFF",
         justifyContent: 'center',
         alignItems: 'center',

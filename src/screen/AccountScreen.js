@@ -61,16 +61,18 @@ const AccountScreen = () => {
                 </View>
                 {/* totalcount */}
 
-                {/* Passwords cards go here */}
-                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
-                    <View style={styles.passwordbox}>
-                        {data.map((item) => (
-                            <PasswordCard key={item.ID} attr={item} /> // Ensure each item has a unique key
-                        ))}
-                    </View>
-                </ScrollView>
+                <View style={styles.Overlay}>
+                    {/* Passwords cards go here */}
+                    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
+                        <View style={styles.passwordbox}>
+                            {data.map((item) => (
+                                <PasswordCard key={item.ID} attr={item} /> // Ensure each item has a unique key
+                            ))}
+                        </View>
+                    </ScrollView>
+                </View>
             </View>
-        </SafeAreaProvider>
+        </SafeAreaProvider >
     );
 };
 
@@ -78,6 +80,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+    },
+    Overlay: {
+        flex: 1,
+        backgroundColor: '#baddf0',
+        marginTop: height * 0.01,
+        borderTopLeftRadius: 16,
+        borderTopRightRadius: 16,
     },
     appBar: {
         marginTop: height * 0.02,
@@ -93,11 +102,12 @@ const styles = StyleSheet.create({
         padding: width * 0.03,
         elevation: 1,
         borderRadius: width / 2,
+        backgroundColor: "#baddf0",
     },
     headerTitle: {
         fontSize: width * 0.06,
         fontWeight: 'bold',
-        color: 'black',
+        color: '#05203e',
     },
 
     totalCountContainer: {
@@ -107,12 +117,13 @@ const styles = StyleSheet.create({
         marginTop: height * 0.015,
         marginLeft: width * 0.04,
         marginRight: width * 0.04,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+        borderBottomWidth: 2,
+        borderBottomColor: '#023f78',
     },
     totalCountText: {
         fontSize: width * 0.05,
-        fontWeight: 'bold',
+        fontWeight: '600',
+        color: '#05203e',
     },
     totalCountNumber: {
         fontSize: width * 0.05,

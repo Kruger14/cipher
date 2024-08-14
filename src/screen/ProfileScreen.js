@@ -44,7 +44,7 @@ const Profilescreen = () => {
     const requestStoragePermission = async () => {
         try {
             if (Platform.OS === 'android') {
-                if (Platform.Version >= 30) {
+                if (Platform.Version >= 29) {
                     return true;
                 }
                 const granted = await PermissionsAndroid.request(
@@ -75,14 +75,18 @@ const Profilescreen = () => {
             return;
         }
 
-        const jsonString = JSON.stringify(obj, null, 2);
+        let objString = '';
+        for (const [key, value] of Object.entries(obj)) {
+            objString += `${key}: ${value}\n`;
+        }
+
         const path = `${RNFS.DownloadDirectoryPath}/cipher.txt`;
 
         try {
-            await RNFS.writeFile(path, jsonString, 'utf8');
+            await RNFS.writeFile(path, objString, 'utf8');
             ToastAndroid.show(`Stored in ${path}`, ToastAndroid.SHORT);
         } catch (error) {
-            ToastAndroid.show(error, ToastAndroid.SHORT);
+            ToastAndroid.show(`Error: ${error.message}`, ToastAndroid.SHORT);
         }
     };
 
@@ -107,42 +111,45 @@ const Profilescreen = () => {
                     </View>
                 </View>
 
-                <View style={styles.mainContainer}>
-                    <View style={styles.header}>
-                        <Text style={styles.subheaderTitle}>Securely Store and manage your</Text>
-                        <Text style={styles.subheaderTitle}>Passwords with ease</Text>
-                        <UserCircleIcon height={width * 0.4} width={width * 0.4} color={"black"} />
-                        <Text style={styles.ownerName}>{data}</Text>
-                    </View>
+                <View style={styles.Overlay}>
 
-                    <View style={styles.cardContainer}>
-                        <ScrollView showsVerticalScrollIndicator={false}>
-                            <View style={styles.settingsList}>
-                                <TouchableOpacity onPress={() => { stack.navigate('Home') }} style={styles.settingsItem}>
-                                    <View style={styles.settingsItemin}>
-                                        <PlusCircleIcon color={"black"} width={width * 0.06} height={width * 0.06} />
-                                        <Text style={styles.settingsText}>Add Another</Text>
-                                    </View>
-                                    <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
-                                </TouchableOpacity>
+                    <View style={styles.mainContainer}>
+                        <View style={styles.header}>
+                            <Text style={styles.subheaderTitle}>Securely Store and manage your</Text>
+                            <Text style={styles.subheaderTitle}>Passwords with ease</Text>
+                            <UserCircleIcon height={width * 0.4} width={width * 0.4} color={"black"} />
+                            <Text style={styles.ownerName}>{data}</Text>
+                        </View>
 
-                                <TouchableOpacity onPress={() => { stack.navigate('Passwords') }} style={styles.settingsItem}>
-                                    <View style={styles.settingsItemin}>
-                                        <BookmarkIcon color={"black"} width={width * 0.06} height={width * 0.06} />
-                                        <Text style={styles.settingsText}>Total Passwords saved</Text>
-                                    </View>
-                                    <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
-                                </TouchableOpacity>
+                        <View style={styles.cardContainer}>
+                            <ScrollView showsVerticalScrollIndicator={false}>
+                                <View style={styles.settingsList}>
+                                    <TouchableOpacity onPress={() => { stack.navigate('Home') }} style={styles.settingsItem}>
+                                        <View style={styles.settingsItemin}>
+                                            <PlusCircleIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                                            <Text style={styles.settingsText}>Add Another</Text>
+                                        </View>
+                                        <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                                    </TouchableOpacity>
 
-                                <TouchableOpacity style={styles.settingsItem} onPress={saveObject}>
-                                    <View style={styles.settingsItemin}>
-                                        <ArrowDownOnSquareIcon color={"black"} width={width * 0.06} height={width * 0.06} />
-                                        <Text style={styles.settingsText}>Save as JSON file</Text>
-                                    </View>
-                                    <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
-                                </TouchableOpacity>
-                            </View>
-                        </ScrollView>
+                                    <TouchableOpacity onPress={() => { stack.navigate('Passwords') }} style={styles.settingsItem}>
+                                        <View style={styles.settingsItemin}>
+                                            <BookmarkIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                                            <Text style={styles.settingsText}>Total Passwords saved</Text>
+                                        </View>
+                                        <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity style={styles.settingsItem} onPress={saveObject}>
+                                        <View style={styles.settingsItemin}>
+                                            <ArrowDownOnSquareIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                                            <Text style={styles.settingsText}>Save as JSON file</Text>
+                                        </View>
+                                        <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                                    </TouchableOpacity>
+                                </View>
+                            </ScrollView>
+                        </View>
                     </View>
                 </View>
             </View >
@@ -166,6 +173,12 @@ const styles = StyleSheet.create({
         padding: width * 0.03,
         elevation: 1,
         borderRadius: 100,
+        backgroundColor: '#baddf0',
+    },
+    Overlay: {
+        flex: 1,
+        backgroundColor: '#baddf0',
+        marginVertical: height * 0.01,
     },
     mainContainer: {
         flex: 1,
@@ -181,7 +194,7 @@ const styles = StyleSheet.create({
     headerTitle: {
         fontSize: width * 0.06,
         fontWeight: 'bold',
-        color: 'black',
+        color: '#05203e',
     },
 
     subheaderTitle: {
@@ -197,7 +210,7 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
         justifyContent: "space-evenly",
-        backgroundColor: '#fff',
+        backgroundColor: '#5acaf8',
         width: '100%',
         flex: 1,
         borderRadius: 16,
@@ -218,7 +231,7 @@ const styles = StyleSheet.create({
     },
     settingsItem: {
         elevation: 4,
-        backgroundColor: '#f8f9fa',
+        backgroundColor: '#e5d5c8',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

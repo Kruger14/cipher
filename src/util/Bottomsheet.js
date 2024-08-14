@@ -35,54 +35,62 @@ const BottomSheet = ({ onClose, ID }) => {
     };
 
     return (
-        <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Update Information</Text>
+        <View style={styles.inset}>
+            <View style={styles.modalContent}>
+                {/* <Text style={styles.upBtn}>------</Text> */}
+                <Text style={styles.modalTitle}>Update Information</Text>
+                <View style={styles.Overlay}>
 
-            <View style={styles.textContainer}>
-                <Text style={styles.label}>Username</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Username"
-                    value={data.username}
-                    onChangeText={(text) => handleUpdate('username', text)}
-                />
-            </View>
+                    <View style={styles.textContainer}>
+                        <Text style={styles.label}>Username</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Username"
+                            value={data.username}
+                            onChangeText={(text) => handleUpdate('username', text)}
+                        />
+                    </View>
 
-            <View style={styles.textContainer}>
-                <Text style={styles.label}>Password</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    value={data.password}
-                    onChangeText={(text) => handleUpdate('password', text)}
-                    secureTextEntry={true}
-                />
-            </View>
+                    <View style={styles.textContainer}>
+                        <Text style={styles.label}>Password</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Password"
+                            value={data.password}
+                            onChangeText={(text) => handleUpdate('password', text)}
+                            secureTextEntry={true}
+                        />
+                    </View>
 
-            <View style={styles.textContainer}>
-                <Text style={styles.label}>Network image Or site name</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Network image"
-                    value={data.netimageurl}
-                    onChangeText={(text) => handleUpdate('netimageurl', text)}
-                />
-            </View>
+                    <View style={styles.textContainer}>
+                        <Text style={styles.label}>Network image Or site name</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Network image"
+                            value={data.netimageurl}
+                            onChangeText={(text) => handleUpdate('netimageurl', text)}
+                        />
+                    </View>
 
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.updateButton} onPress={updateButton}>
-                    <Text style={styles.buttonText}>Update</Text>
-                </TouchableOpacity>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style={styles.updateButton} onPress={updateButton}>
+                            <Text style={styles.buttonText}>Update</Text>
+                        </TouchableOpacity>
 
-                <TouchableOpacity style={styles.cancelButton} onPress={closeSheet}>
-                    <Text style={styles.buttonText}>Cancel</Text>
-                </TouchableOpacity>
+                        <TouchableOpacity style={styles.cancelButton} onPress={closeSheet}>
+                            <Text style={styles.buttonText}>Cancel</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    inset: {
+        backgroundColor: 'green',
+    },
     modalContent: {
         flexDirection: 'column',
         justifyContent: 'center',
@@ -92,7 +100,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
     },
-
+    upBtn: {
+        color: 'green',
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
     modalTitle: {
         fontSize: 18,
         marginBottom: 10,
@@ -107,7 +119,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         paddingHorizontal: 10,
         color: 'black',
-        fontWeight: '400',
+        fontWeight: '500',
+        borderRadius: 1,
     },
 
     label: {

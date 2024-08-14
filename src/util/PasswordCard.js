@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: width * 0.04,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#7c5536',
         borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 5, height: 7 },
@@ -137,11 +137,11 @@ const styles = StyleSheet.create({
     },
     username: {
         fontSize: width * 0.045,
-        fontWeight: 'bold',
-        color: '#333',
+        fontWeight: '500',
+        color: 'white',
     },
     userPass: {
-        color: 'black',
+        color: 'white',
         fontWeight: '600',
         fontSize: width * 0.04,
     },

@@ -1,12 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect } from 'react';
-import { StyleSheet, View, Text, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Image } from 'react-native';
 import Animated, {
     useSharedValue, withSpring,
     useAnimatedStyle
 } from 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import IC from '../assets/icon.png';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -16,12 +17,12 @@ const SplashScreen = () => {
     const navigation = useNavigation();
 
     useEffect(() => {
-        setTimeout(() => { circleTwoPadding.value = withSpring(35); }, 50);
-        setTimeout(() => { circleOnePadding.value = withSpring(45); }, 100);
+        setTimeout(() => { circleTwoPadding.value = withSpring(35); }, 100);
+        setTimeout(() => { circleOnePadding.value = withSpring(45); }, 200);
         setTimeout(async () => {
             const data = await getData()
             data ? navigation.navigate('Tab') : navigation.navigate('Onboard')
-        }, 155);
+        }, 350);
     }, []);
 
     const getData = async () => {
@@ -47,7 +48,7 @@ const SplashScreen = () => {
                 <Animated.View style={[styles.circleOne, circleOneStyle]}>
                     <Animated.View style={[styles.circleTwo, circleTwoStyle]}>
                         <View style={styles.circleThree}>
-                            <Text style={styles.txt}>Cipher</Text>
+                            <Image source={IC} style={styles.circleThree} />
                         </View>
                     </Animated.View>
                 </Animated.View>
@@ -63,13 +64,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'black',
     },
-    txt: {
-        fontFamily: 'Georgia',
-        fontStyle: 'normal',
-        fontWeight: '700',
-        fontSize: width * 0.08,
-        color: '#333',
-    },
+    ic: {},
     circleOne: {
         backgroundColor: '#4a90e2',
         borderRadius: (width * 0.9) / 2,
@@ -85,10 +80,8 @@ const styles = StyleSheet.create({
     circleThree: {
         width: width * 0.4,
         height: width * 0.4,
-        backgroundColor: 'yellow',
         borderRadius: (width * 0.4) / 2,
-        justifyContent: 'center',
-        alignItems: 'center',
+        objectFit: "contain",
     },
 });
 
