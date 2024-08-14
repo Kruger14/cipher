@@ -6,6 +6,7 @@ import Animated, {
     useSharedValue, withSpring,
     useAnimatedStyle
 } from 'react-native-reanimated';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -20,7 +21,7 @@ const SplashScreen = () => {
         setTimeout(async () => {
             const data = await getData()
             data ? navigation.navigate('Tab') : navigation.navigate('Onboard')
-        }, 10);
+        }, 155);
     }, []);
 
     const getData = async () => {
@@ -41,15 +42,17 @@ const SplashScreen = () => {
     }));
 
     return (
-        <View style={styles.mainContainer}>
-            <Animated.View style={[styles.circleOne, circleOneStyle]}>
-                <Animated.View style={[styles.circleTwo, circleTwoStyle]}>
-                    <View style={styles.circleThree}>
-                        <Text style={styles.txt}>Cipher</Text>
-                    </View>
+        <SafeAreaProvider>
+            <View style={styles.mainContainer}>
+                <Animated.View style={[styles.circleOne, circleOneStyle]}>
+                    <Animated.View style={[styles.circleTwo, circleTwoStyle]}>
+                        <View style={styles.circleThree}>
+                            <Text style={styles.txt}>Cipher</Text>
+                        </View>
+                    </Animated.View>
                 </Animated.View>
-            </Animated.View>
-        </View>
+            </View>
+        </SafeAreaProvider>
     );
 };
 

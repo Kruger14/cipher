@@ -4,6 +4,7 @@ import Video from 'react-native-video';
 import { ChevronRightIcon } from 'react-native-heroicons/outline';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -48,49 +49,52 @@ const OnboardScreen = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <SafeAreaProvider>
 
-            <Video
-                source={require("../assets/background.mp4")}
-                style={StyleSheet.absoluteFill}
-                resizeMode="cover"
-                repeat={true}
-                muted={true}
-            />
+            <View style={styles.container}>
 
-            <View style={styles.overlay}>
-                <View style={styles.appbar}>
-                    <Text style={styles.txt}>Thank you for installing Cipher,</Text>
-                    <Text style={styles.txt}>placing your trust in us</Text>
-                </View>
+                <Video
+                    source={require("../assets/background.mp4")}
+                    style={StyleSheet.absoluteFill}
+                    resizeMode="cover"
+                    repeat={true}
+                    muted={true}
+                />
 
-                <View style={styles.welcomeBox}>
-                    <Text style={styles.welcomeText}>
-                        Organize and protect all your passwords with Cipher. Say goodbye to password fatigue and hello to seamless, secure access.
-                    </Text>
-                </View>
-
-                <View style={styles.note}>
-                    <Text style={styles.noteTxt}>Note: You cannot change this name later</Text>
-                </View>
-
-                <View style={styles.form}>
-                    <Text style={styles.inptxt}>User Name</Text>
-                    <TextInput
-                        placeholder='Enter your name to display on the homepage'
-                        style={styles.inp}
-                        value={data}
-                        onChangeText={textChange}
-                    />
-                </View>
-
-                <TouchableOpacity style={styles.posogbtn} onPress={goFront}>
-                    <View style={styles.button}>
-                        <ChevronRightIcon color={"black"} height={width * 0.06} width={width * 0.06} />
+                <View style={styles.overlay}>
+                    <View style={styles.appbar}>
+                        <Text style={styles.txt}>Thank you for installing Cipher,</Text>
+                        <Text style={styles.txt}>placing your trust in us</Text>
                     </View>
-                </TouchableOpacity>
+
+                    <View style={styles.welcomeBox}>
+                        <Text style={styles.welcomeText}>
+                            Organize and protect all your passwords with Cipher. Say goodbye to password fatigue and hello to seamless, secure access.
+                        </Text>
+                    </View>
+
+                    <View style={styles.note}>
+                        <Text style={styles.noteTxt}>Note: You cannot change this name later</Text>
+                    </View>
+
+                    <View style={styles.form}>
+                        <Text style={styles.inptxt}>User Name</Text>
+                        <TextInput
+                            placeholder='Enter your name to display on the homepage'
+                            style={styles.inp}
+                            value={data}
+                            onChangeText={textChange}
+                        />
+                    </View>
+
+                    <TouchableOpacity style={styles.posogbtn} onPress={goFront}>
+                        <View style={styles.button}>
+                            <ChevronRightIcon color={"black"} height={width * 0.06} width={width * 0.06} />
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
+        </SafeAreaProvider>
     );
 };
 

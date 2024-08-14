@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, Dimensions, ScrollView, ToastAndroid, BackHandler } from 'react-native';
 import db, { createTable, insertData } from '../service/db'; // Adjust the import path as necessary
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -84,70 +85,73 @@ const HomeScreen = () => {
 
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "android" ? "padding" : "height"}
-            style={styles.container}
-        >
-            <View style={styles.appbar}>
-                <Text style={styles.txt}>Cipher</Text>
-            </View>
+        <SafeAreaProvider>
 
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.welcomeBox}>
-                    <Text style={styles.greet}>Welcome back!</Text>
-                    <Text style={styles.user}>{userData}</Text>
-                    <Text style={styles.saying}>Keep your Passwords safe with Cipher</Text>
-                    <Text style={styles.note}>Note: Images load on active connection</Text>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "android" ? "padding" : "height"}
+                style={styles.container}
+            >
+                <View style={styles.appbar}>
+                    <Text style={styles.txt}>Cipher</Text>
                 </View>
 
-                {/* image preview */}
-                <View style={styles.imgView}>
-                    <Text style={styles.txt}>Image Preview</Text>
-                    {isValidImageUrl(data.netimage) ? (
-                        < Image source={{ uri: data.netimage }} style={styles.img} />
-                    ) :
-                        (
-                            <View style={styles.noImageContainer}>
-                                <Text style={styles.noImageText}>{data.netimage}</Text>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View style={styles.welcomeBox}>
+                        <Text style={styles.greet}>Welcome back!</Text>
+                        <Text style={styles.user}>{userData}</Text>
+                        <Text style={styles.saying}>Keep your Passwords safe with Cipher</Text>
+                        <Text style={styles.note}>Note: Images load on active connection</Text>
+                    </View>
+
+                    {/* image preview */}
+                    <View style={styles.imgView}>
+                        <Text style={styles.txt}>Image Preview</Text>
+                        {isValidImageUrl(data.netimage) ? (
+                            < Image source={{ uri: data.netimage }} style={styles.img} />
+                        ) :
+                            (
+                                <View style={styles.noImageContainer}>
+                                    <Text style={styles.noImageText}>{data.netimage}</Text>
+                                </View>
+                            )
+                        }
+                    </View>
+
+                    <View style={styles.form}>
+                        <Text style={styles.inptxt}>User Name</Text>
+                        <TextInput
+                            onChangeText={(text) => handleInputChange('username', text)}
+                            value={data.username}
+                            placeholder='Enter Username'
+                            style={styles.inp}
+                        />
+
+                        <Text style={styles.inptxt}>Password</Text>
+                        <TextInput
+                            onChangeText={(text) => handleInputChange('password', text)}
+                            value={data.password}
+                            placeholder='Enter password'
+                            style={styles.inp}
+                            secureTextEntry={true}
+                        />
+
+                        <Text style={styles.inptxt}>Network Image Or Name Of The Site</Text>
+                        <TextInput
+                            onChangeText={(text) => handleInputChange('netimage', text)}
+                            value={data.netimage}
+                            placeholder='Enter Network Image URL'
+                            style={styles.inp}
+                        />
+
+                        <TouchableOpacity onPress={handleAdd}>
+                            <View style={styles.button}>
+                                <Text style={styles.buttonText}>Save</Text>
                             </View>
-                        )
-                    }
-                </View>
-
-                <View style={styles.form}>
-                    <Text style={styles.inptxt}>User Name</Text>
-                    <TextInput
-                        onChangeText={(text) => handleInputChange('username', text)}
-                        value={data.username}
-                        placeholder='Enter Username'
-                        style={styles.inp}
-                    />
-
-                    <Text style={styles.inptxt}>Password</Text>
-                    <TextInput
-                        onChangeText={(text) => handleInputChange('password', text)}
-                        value={data.password}
-                        placeholder='Enter password'
-                        style={styles.inp}
-                        secureTextEntry={true}
-                    />
-
-                    <Text style={styles.inptxt}>Network Image Or Name Of The Site</Text>
-                    <TextInput
-                        onChangeText={(text) => handleInputChange('netimage', text)}
-                        value={data.netimage}
-                        placeholder='Enter Network Image URL'
-                        style={styles.inp}
-                    />
-
-                    <TouchableOpacity onPress={handleAdd}>
-                        <View style={styles.button}>
-                            <Text style={styles.buttonText}>Save</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
-        </KeyboardAvoidingView>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
+            </KeyboardAvoidingView>
+        </SafeAreaProvider>
     );
 };
 
@@ -230,7 +234,7 @@ const styles = StyleSheet.create({
     },
     button: {
         padding: width * 0.025,
-        width: width * 0.25,
+        width: width - 50,
         backgroundColor: "#007BFF",
         justifyContent: 'center',
         alignItems: 'center',

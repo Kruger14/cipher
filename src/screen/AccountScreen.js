@@ -1,9 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, ToastAndroid } from 'react-native';
-import { ChevronLeftIcon } from 'react-native-heroicons/outline';
+import { ArrowLeftIcon } from 'react-native-heroicons/outline';
 import PasswordCard from '../util/PasswordCard';
 import db from '../service/db';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -36,37 +37,40 @@ const AccountScreen = () => {
     }, [data]);
 
     return (
-        <View style={styles.container}>
-            {/* appBar start */}
-            <View style={styles.appBar}>
-                <TouchableOpacity onPress={() => navigate.navigate('Home')}>
-                    <View style={styles.iconWrapper}>
-                        <ChevronLeftIcon color={"black"} height={width * 0.06} width={width * 0.06} />
+        <SafeAreaProvider>
+
+            <View style={styles.container}>
+                {/* appBar start */}
+                <View style={styles.appBar}>
+                    <TouchableOpacity onPress={() => navigate.navigate('Home')}>
+                        <View style={styles.iconWrapper}>
+                            <ArrowLeftIcon color={"black"} height={width * 0.06} width={width * 0.06} />
+                        </View>
+                    </TouchableOpacity>
+
+                    <View >
+                        <Text style={styles.headerTitle}>Passwords</Text>
                     </View>
-                </TouchableOpacity>
-
-                <View style={styles.txt}>
-                    <Text style={styles.headerTitle}>Passwords</Text>
                 </View>
-            </View>
-            {/* appBar end */}
+                {/* appBar end */}
 
-            {/* totalcount */}
-            <View style={styles.totalCountContainer}>
-                <Text style={styles.totalCountText}>Passwords saved</Text>
-                <Text style={styles.totalCountNumber}>{data.length}</Text>
-            </View>
-            {/* totalcount */}
-
-            {/* Passwords cards go here */}
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
-                <View style={styles.passwordbox}>
-                    {data.map((item) => (
-                        <PasswordCard key={item.ID} attr={item} /> // Ensure each item has a unique key
-                    ))}
+                {/* totalcount */}
+                <View style={styles.totalCountContainer}>
+                    <Text style={styles.totalCountText}>Passwords saved</Text>
+                    <Text style={styles.totalCountNumber}>{data.length}</Text>
                 </View>
-            </ScrollView>
-        </View>
+                {/* totalcount */}
+
+                {/* Passwords cards go here */}
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
+                    <View style={styles.passwordbox}>
+                        {data.map((item) => (
+                            <PasswordCard key={item.ID} attr={item} /> // Ensure each item has a unique key
+                        ))}
+                    </View>
+                </ScrollView>
+            </View>
+        </SafeAreaProvider>
     );
 };
 
@@ -88,16 +92,14 @@ const styles = StyleSheet.create({
         display: 'flex',
         padding: width * 0.03,
         elevation: 1,
-        borderRadius: 50,
+        borderRadius: width / 2,
     },
     headerTitle: {
         fontSize: width * 0.06,
         fontWeight: 'bold',
         color: 'black',
     },
-    txt: {
-        marginTop: height * 0.01,
-    },
+
     totalCountContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',

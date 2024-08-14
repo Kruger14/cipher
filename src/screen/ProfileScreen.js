@@ -1,12 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, Dimensions, ScrollView, ToastAndroid, PermissionsAndroid, Platform } from 'react-native';
-import { ChevronRightIcon, ChevronLeftIcon, PlusCircleIcon, BookmarkIcon, ArrowDownOnSquareIcon } from 'react-native-heroicons/outline';
+import { ChevronRightIcon, ArrowLeftIcon, PlusCircleIcon, BookmarkIcon, ArrowDownOnSquareIcon } from 'react-native-heroicons/outline';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import db from '../service/db';
 import RNFS from 'react-native-fs';
 import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { UserCircleIcon } from "react-native-heroicons/outline";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -91,55 +92,61 @@ const Profilescreen = () => {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.appBar}>
-                <TouchableOpacity onPress={() => { stack.navigate('Home') }}>
-                    <View style={styles.iconWrapper}>
-                        <ChevronLeftIcon color={"black"} height={width * 0.06} width={width * 0.06} />
-                    </View>
-                </TouchableOpacity>
-            </View>
+        <SafeAreaProvider>
 
-            <View style={styles.mainContainer}>
-                <View style={styles.header}>
-                    <Text style={styles.headerTitle}>Profile</Text>
-                    <Text style={styles.subheaderTitle}>Securely Store and manage your</Text>
-                    <Text style={styles.subheaderTitle}>Passwords with ease</Text>
-                    <UserCircleIcon height={width * 0.4} width={width * 0.4} color={"black"} />
-                    <Text style={styles.ownerName}>{data}</Text>
-                </View>
-
-                <View style={styles.cardContainer}>
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        <View style={styles.settingsList}>
-                            <TouchableOpacity onPress={() => { stack.navigate('Home') }} style={styles.settingsItem}>
-                                <View style={styles.settingsItemin}>
-                                    <PlusCircleIcon color={"black"} width={width * 0.06} height={width * 0.06} />
-                                    <Text style={styles.settingsText}>Add Another</Text>
-                                </View>
-                                <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity onPress={() => { stack.navigate('Passwords') }} style={styles.settingsItem}>
-                                <View style={styles.settingsItemin}>
-                                    <BookmarkIcon color={"black"} width={width * 0.06} height={width * 0.06} />
-                                    <Text style={styles.settingsText}>Total Passwords saved</Text>
-                                </View>
-                                <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.settingsItem} onPress={saveObject}>
-                                <View style={styles.settingsItemin}>
-                                    <ArrowDownOnSquareIcon color={"black"} width={width * 0.06} height={width * 0.06} />
-                                    <Text style={styles.settingsText}>Save as JSON file</Text>
-                                </View>
-                                <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
-                            </TouchableOpacity>
+            <View style={styles.container}>
+                <View style={styles.appBar}>
+                    <TouchableOpacity onPress={() => { stack.navigate('Home') }}>
+                        <View style={styles.iconWrapper}>
+                            <ArrowLeftIcon color={"black"} height={width * 0.06} width={width * 0.06} />
                         </View>
-                    </ScrollView>
+                    </TouchableOpacity>
+
+                    <View style={styles.txt}>
+                        <Text style={styles.headerTitle}>Profile</Text>
+                    </View>
                 </View>
-            </View>
-        </View >
+
+                <View style={styles.mainContainer}>
+                    <View style={styles.header}>
+                        <Text style={styles.subheaderTitle}>Securely Store and manage your</Text>
+                        <Text style={styles.subheaderTitle}>Passwords with ease</Text>
+                        <UserCircleIcon height={width * 0.4} width={width * 0.4} color={"black"} />
+                        <Text style={styles.ownerName}>{data}</Text>
+                    </View>
+
+                    <View style={styles.cardContainer}>
+                        <ScrollView showsVerticalScrollIndicator={false}>
+                            <View style={styles.settingsList}>
+                                <TouchableOpacity onPress={() => { stack.navigate('Home') }} style={styles.settingsItem}>
+                                    <View style={styles.settingsItemin}>
+                                        <PlusCircleIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                                        <Text style={styles.settingsText}>Add Another</Text>
+                                    </View>
+                                    <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                                </TouchableOpacity>
+
+                                <TouchableOpacity onPress={() => { stack.navigate('Passwords') }} style={styles.settingsItem}>
+                                    <View style={styles.settingsItemin}>
+                                        <BookmarkIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                                        <Text style={styles.settingsText}>Total Passwords saved</Text>
+                                    </View>
+                                    <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.settingsItem} onPress={saveObject}>
+                                    <View style={styles.settingsItemin}>
+                                        <ArrowDownOnSquareIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                                        <Text style={styles.settingsText}>Save as JSON file</Text>
+                                    </View>
+                                    <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
+                                </TouchableOpacity>
+                            </View>
+                        </ScrollView>
+                    </View>
+                </View>
+            </View >
+        </SafeAreaProvider>
     );
 };
 
@@ -173,9 +180,8 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontSize: width * 0.06,
-        fontWeight: '400',
+        fontWeight: 'bold',
         color: 'black',
-        marginBottom: height * 0.02,
     },
 
     subheaderTitle: {
