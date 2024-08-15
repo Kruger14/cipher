@@ -17,78 +17,9 @@ const Profilescreen = () => {
     const [obj, setObj] = useState([]);
 
     useEffect(() => {
-        selectAll();
         fetchData();
-    }, [obj]);
+    }, []);
 
-    const selectAll = () => {
-        db.transaction(tx => {
-            tx.executeSql(
-                'SELECT * FROM PASSWORDS',
-                [],
-                (tx, results) => {
-                    let rows = results.rows;
-                    let temp = [];
-                    for (let i = 0; i < rows.length; i++) {
-                        temp.push(rows.item(i));
-                    }
-                    setObj(temp);
-                },
-                (error) => {
-                    ToastAndroid.show(error, ToastAndroid.SHORT);
-                }
-            );
-        });
-    };
-
-    const requestStoragePermission = async () => {
-        try {
-            if (Platform.OS === 'android') {
-                if (Platform.Version >= 29) {
-                    return true;
-                }
-                const granted = await PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                    {
-                        title: 'Storage Permission',
-                        message: 'App needs access to your storage to download files.',
-                        buttonNeutral: 'Ask Me Later',
-                        buttonNegative: 'Cancel',
-                        buttonPositive: 'OK',
-                    },
-                );
-                return granted === PermissionsAndroid.RESULTS.GRANTED;
-            } else {
-                const result = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
-                return result === RESULTS.GRANTED;
-            }
-        } catch (err) {
-            ToastAndroid.show(err, ToastAndroid.SHORT)
-            return false;
-        }
-    };
-
-    const saveObject = async () => {
-        const hasPermission = await requestStoragePermission();
-        if (!hasPermission) {
-            ToastAndroid.show('Storage permission denied', ToastAndroid.SHORT);
-            return;
-        }
-
-        let objString = '';
-        for (const [key, value] of Object.entries(obj)) {
-            objString += `${key}: ${value}\n`;
-        }
-
-        const path = `${RNFS.DownloadDirectoryPath}/cipher.txt`;
-
-        try {
-            await RNFS.writeFile(path, objString, 'utf8');
-            ToastAndroid.show(`Stored in ${path}`, ToastAndroid.SHORT);
-        } catch (error) {
-            ToastAndroid.show(`Error: ${error.message}`, ToastAndroid.SHORT);
-        }
-    };
 
     const fetchData = async () => {
         const data = await AsyncStorage.getItem('name');
@@ -97,7 +28,6 @@ const Profilescreen = () => {
 
     return (
         <SafeAreaProvider>
-
             <View style={styles.container}>
                 <View style={styles.appBar}>
                     <TouchableOpacity onPress={() => { stack.navigate('Home') }}>
@@ -105,14 +35,11 @@ const Profilescreen = () => {
                             <ArrowLeftIcon color={"black"} height={width * 0.06} width={width * 0.06} />
                         </View>
                     </TouchableOpacity>
-
                     <View style={styles.txt}>
                         <Text style={styles.headerTitle}>Profile</Text>
                     </View>
                 </View>
-
                 <View style={styles.Overlay}>
-
                     <View style={styles.mainContainer}>
                         <View style={styles.header}>
                             <Text style={styles.subheaderTitle}>Securely Store and manage your</Text>
@@ -120,7 +47,6 @@ const Profilescreen = () => {
                             <UserCircleIcon height={width * 0.4} width={width * 0.4} color={"black"} />
                             <Text style={styles.ownerName}>{data}</Text>
                         </View>
-
                         <View style={styles.cardContainer}>
                             <ScrollView showsVerticalScrollIndicator={false}>
                                 <View style={styles.settingsList}>
@@ -131,7 +57,6 @@ const Profilescreen = () => {
                                         </View>
                                         <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
                                     </TouchableOpacity>
-
                                     <TouchableOpacity onPress={() => { stack.navigate('Passwords') }} style={styles.settingsItem}>
                                         <View style={styles.settingsItemin}>
                                             <BookmarkIcon color={"black"} width={width * 0.06} height={width * 0.06} />
@@ -139,8 +64,7 @@ const Profilescreen = () => {
                                         </View>
                                         <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
                                     </TouchableOpacity>
-
-                                    <TouchableOpacity style={styles.settingsItem} onPress={saveObject}>
+                                    <TouchableOpacity style={styles.settingsItem} >
                                         <View style={styles.settingsItemin}>
                                             <ArrowDownOnSquareIcon color={"black"} width={width * 0.06} height={width * 0.06} />
                                             <Text style={styles.settingsText}>Save as JSON file</Text>
@@ -152,7 +76,7 @@ const Profilescreen = () => {
                         </View>
                     </View>
                 </View>
-            </View >
+            </View>
         </SafeAreaProvider>
     );
 };
@@ -196,7 +120,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#05203e',
     },
-
     subheaderTitle: {
         fontSize: width * 0.04,
         color: 'black',
@@ -214,7 +137,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flex: 1,
         borderRadius: 16,
-        padding: width * 0.06,
+        padding: width * 0.04,
         marginTop: height * 0.08,
         marginBottom: height * 0.03,
         shadowColor: '#000',
