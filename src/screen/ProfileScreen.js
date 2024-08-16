@@ -1,10 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Dimensions, ScrollView, ToastAndroid, Alert, PermissionsAndroid, Platform } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, Dimensions, ScrollView, ToastAndroid, Platform, Alert } from 'react-native';
 import { ChevronRightIcon, ArrowLeftIcon, PlusCircleIcon, BookmarkIcon, ArrowDownOnSquareIcon, UserCircleIcon } from 'react-native-heroicons/outline';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNFS from 'react-native-fs';
 import db from '../service/db';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -18,7 +20,60 @@ const Profilescreen = () => {
         selectAll();
     }, []);
 
+    const requestStoragePermission = async () => {
+        try {
+            if (Platform.OS === 'android') {
+                // if (Platform.Version >= 29) {
+                //     console.log("Android version 29 or higher");
+                //     return true;
+                // }
 
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                    {
+                        title: 'Storage Permission',
+                        message: 'App needs access to your storage to download files.',
+                        buttonNeutral: 'Ask Me Later',
+                        buttonNegative: 'Cancel',
+                        buttonPositive: 'OK',
+                    },
+                );
+
+                return granted === PermissionsAndroid.RESULTS.GRANTED;
+            } else if (Platform.OS === 'ios') {
+                const result = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
+                return result === RESULTS.GRANTED;
+            }
+            return false;
+        } catch (err) {
+            console.error('Permission request error:', err);
+            ToastAndroid.show('Permission request error', ToastAndroid.SHORT);
+            return false;
+        }
+    };
+
+    const saveObject = async () => {
+        const hasPermission = await requestStoragePermission();
+        if (!hasPermission) {
+            ToastAndroid.show('Storage permission denied', ToastAndroid.SHORT);
+            return;
+        }
+        const path = `${RNFS.ExternalStorageDirectoryPath}/cipher.txt`;
+        let content = "";
+        for (const [key, value] of Object.entries(obj)) {
+            content += `${key}: ${value}\n`;
+        }
+        console.log("inside saveObject");
+
+        try {
+            await RNFS.writeFile(path, content, 'utf8');
+            ToastAndroid.show(`Stored in ${path}`, ToastAndroid.SHORT);
+            console.log(`File stored in ${path}`);
+        } catch (error) {
+            console.error('Error saving object:', error);
+            ToastAndroid.show('Error saving object', ToastAndroid.SHORT);
+        }
+    };
 
     const selectAll = () => {
         db.transaction(tx => {
@@ -34,15 +89,21 @@ const Profilescreen = () => {
                     setObj(temp);
                 },
                 (error) => {
-                    ToastAndroid.show(error, ToastAndroid.SHORT);
+                    console.error('Error fetching data:', error);
+                    ToastAndroid.show('Error fetching data', ToastAndroid.SHORT);
                 }
             );
         });
     };
 
     const fetchData = async () => {
-        const data = await AsyncStorage.getItem('name');
-        setData(data);
+        try {
+            const data = await AsyncStorage.getItem('name');
+            setData(data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            ToastAndroid.show('Error fetching data', ToastAndroid.SHORT);
+        }
     };
 
     return (
@@ -83,7 +144,7 @@ const Profilescreen = () => {
                                         </View>
                                         <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.settingsItem}  >
+                                    <TouchableOpacity style={styles.settingsItem} onPress={() => { saveObject(obj) }}>
                                         <View style={styles.settingsItemin}>
                                             <ArrowDownOnSquareIcon color={"black"} width={width * 0.06} height={width * 0.06} />
                                             <Text style={styles.settingsText}>Save as JSON file</Text>
