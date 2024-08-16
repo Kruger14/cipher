@@ -1,12 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Dimensions, ScrollView, ToastAndroid, PermissionsAndroid, Platform } from 'react-native';
-import { ChevronRightIcon, ArrowLeftIcon, PlusCircleIcon, BookmarkIcon, ArrowDownOnSquareIcon } from 'react-native-heroicons/outline';
+import { View, StyleSheet, TouchableOpacity, Text, Dimensions, ScrollView, ToastAndroid, Alert, PermissionsAndroid, Platform } from 'react-native';
+import { ChevronRightIcon, ArrowLeftIcon, PlusCircleIcon, BookmarkIcon, ArrowDownOnSquareIcon, UserCircleIcon } from 'react-native-heroicons/outline';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import db from '../service/db';
-import RNFS from 'react-native-fs';
-import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-import { UserCircleIcon } from "react-native-heroicons/outline";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('screen');
@@ -18,8 +15,30 @@ const Profilescreen = () => {
 
     useEffect(() => {
         fetchData();
+        selectAll();
     }, []);
 
+
+
+    const selectAll = () => {
+        db.transaction(tx => {
+            tx.executeSql(
+                'SELECT * FROM PASSWORDS',
+                [],
+                (tx, results) => {
+                    let rows = results.rows;
+                    let temp = [];
+                    for (let i = 0; i < rows.length; i++) {
+                        temp.push(rows.item(i));
+                    }
+                    setObj(temp);
+                },
+                (error) => {
+                    ToastAndroid.show(error, ToastAndroid.SHORT);
+                }
+            );
+        });
+    };
 
     const fetchData = async () => {
         const data = await AsyncStorage.getItem('name');
@@ -64,7 +83,7 @@ const Profilescreen = () => {
                                         </View>
                                         <ChevronRightIcon color={"black"} width={width * 0.06} height={width * 0.06} />
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.settingsItem} >
+                                    <TouchableOpacity style={styles.settingsItem}  >
                                         <View style={styles.settingsItemin}>
                                             <ArrowDownOnSquareIcon color={"black"} width={width * 0.06} height={width * 0.06} />
                                             <Text style={styles.settingsText}>Save as JSON file</Text>
