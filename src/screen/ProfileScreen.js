@@ -66,18 +66,17 @@ const Profilescreen = () => {
     };
     const saveObject = async (obj) => {
         const hasPermission = await requestStoragePermission();
+
         if (!hasPermission) {
             ToastAndroid.show('Storage permission denied', ToastAndroid.SHORT);
             return;
         }
-        const path = `${RNFS.DownloadDirectoryPath}/cipher.txt`;
-        let content = "";
-        for (const [key, value] of Object.entries(obj)) {
-            content += `${key}: ${value}\n`;
-        }
-
-
         try {
+            const path = `${RNFS.DownloadDirectoryPath}/cipher.txt`;
+
+            let content = JSON.stringify(obj, null, 2);
+
+
             await RNFS.writeFile(path, content, 'utf8');
             ToastAndroid.show(`Stored in ${path}`, ToastAndroid.SHORT);
         } catch (error) {
