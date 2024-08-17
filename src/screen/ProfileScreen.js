@@ -1,13 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Dimensions, ScrollView, ToastAndroid, Platform, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, PermissionsAndroid, Text, Dimensions, ScrollView, ToastAndroid, Platform } from 'react-native';
 import { ChevronRightIcon, ArrowLeftIcon, PlusCircleIcon, BookmarkIcon, ArrowDownOnSquareIcon, UserCircleIcon } from 'react-native-heroicons/outline';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFS from 'react-native-fs';
 import db from '../service/db';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
-
 const { width, height } = Dimensions.get('screen');
 
 const Profilescreen = () => {
@@ -21,56 +20,67 @@ const Profilescreen = () => {
     }, []);
 
     const requestStoragePermission = async () => {
-        try {
-            if (Platform.OS === 'android') {
-                // if (Platform.Version >= 29) {
-                //     console.log("Android version 29 or higher");
-                //     return true;
-                // }
-
-                const granted = await PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                    {
-                        title: 'Storage Permission',
-                        message: 'App needs access to your storage to download files.',
-                        buttonNeutral: 'Ask Me Later',
-                        buttonNegative: 'Cancel',
-                        buttonPositive: 'OK',
-                    },
-                );
-
-                return granted === PermissionsAndroid.RESULTS.GRANTED;
-            } else if (Platform.OS === 'ios') {
-                const result = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
-                return result === RESULTS.GRANTED;
+        if (Platform.OS === 'android') {
+            try {
+                if (Platform.Version >= 30) {
+                    // For Android 11 and above
+                    const result = await request(PERMISSIONS.ANDROID.MANAGE_EXTERNAL_STORAGE);
+                    if (result === RESULTS.GRANTED) {
+                        return true;
+                    } else if (result === RESULTS.DENIED) {
+                        ToastAndroid.show('Storage permission denied', ToastAndroid.SHORT);
+                        return false;
+                    } else if (result === RESULTS.BLOCKED) {
+                        ToastAndroid.show('Storage permission blocked. Please enable it from settings.', ToastAndroid.SHORT);
+                        ToastAndroid.show('Open app settings and enable the permission', ToastAndroid.LONG)
+                        return false;
+                    }
+                } else if (Platform.Version >= 23) {
+                    // For Android 6 to 10
+                    const result = await PermissionsAndroid.request(
+                        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                        {
+                            title: 'Storage Permission',
+                            message: 'App needs access to your storage to download files.',
+                            buttonNeutral: 'Ask Me Later',
+                            buttonNegative: 'Cancel',
+                            buttonPositive: 'OK',
+                        }
+                    );
+                    if (result === PermissionsAndroid.RESULTS.GRANTED) {
+                        return true;
+                    } else {
+                        ToastAndroid.show('Storage permission denied', ToastAndroid.SHORT);
+                        return false;
+                    }
+                } else {
+                    // For Android 5 and below, permissions are granted at install time
+                    return true;
+                }
+            } catch (err) {
+                ToastAndroid.show(`Error: ${err}`, ToastAndroid.SHORT);
+                return false;
             }
-            return false;
-        } catch (err) {
-            console.error('Permission request error:', err);
-            ToastAndroid.show('Permission request error', ToastAndroid.SHORT);
-            return false;
         }
+        return true;
     };
-
-    const saveObject = async () => {
+    const saveObject = async (obj) => {
         const hasPermission = await requestStoragePermission();
         if (!hasPermission) {
             ToastAndroid.show('Storage permission denied', ToastAndroid.SHORT);
             return;
         }
-        const path = `${RNFS.ExternalStorageDirectoryPath}/cipher.txt`;
+        const path = `${RNFS.DownloadDirectoryPath}/cipher.txt`;
         let content = "";
         for (const [key, value] of Object.entries(obj)) {
             content += `${key}: ${value}\n`;
         }
-        console.log("inside saveObject");
+
 
         try {
             await RNFS.writeFile(path, content, 'utf8');
             ToastAndroid.show(`Stored in ${path}`, ToastAndroid.SHORT);
-            console.log(`File stored in ${path}`);
         } catch (error) {
-            console.error('Error saving object:', error);
             ToastAndroid.show('Error saving object', ToastAndroid.SHORT);
         }
     };
@@ -89,7 +99,6 @@ const Profilescreen = () => {
                     setObj(temp);
                 },
                 (error) => {
-                    console.error('Error fetching data:', error);
                     ToastAndroid.show('Error fetching data', ToastAndroid.SHORT);
                 }
             );
@@ -101,7 +110,6 @@ const Profilescreen = () => {
             const data = await AsyncStorage.getItem('name');
             setData(data);
         } catch (error) {
-            console.error('Error fetching data:', error);
             ToastAndroid.show('Error fetching data', ToastAndroid.SHORT);
         }
     };
