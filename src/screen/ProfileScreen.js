@@ -32,11 +32,10 @@ const Profilescreen = () => {
                         return false;
                     } else if (result === RESULTS.BLOCKED) {
                         ToastAndroid.show('Storage permission blocked. Please enable it from settings.', ToastAndroid.SHORT);
-                        ToastAndroid.show('Open app settings and enable the permission', ToastAndroid.LONG)
                         return false;
                     }
-                } else if (Platform.Version >= 23) {
-                    // For Android 6 to 10
+                } else {
+                    // For Android 10 and below
                     const result = await PermissionsAndroid.request(
                         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
                         {
@@ -53,9 +52,6 @@ const Profilescreen = () => {
                         ToastAndroid.show('Storage permission denied', ToastAndroid.SHORT);
                         return false;
                     }
-                } else {
-                    // For Android 5 and below, permissions are granted at install time
-                    return true;
                 }
             } catch (err) {
                 ToastAndroid.show(`Error: ${err}`, ToastAndroid.SHORT);
@@ -64,6 +60,7 @@ const Profilescreen = () => {
         }
         return true;
     };
+
     const saveObject = async (obj) => {
         const hasPermission = await requestStoragePermission();
 
@@ -75,12 +72,11 @@ const Profilescreen = () => {
             const path = `${RNFS.DownloadDirectoryPath}/cipher.txt`;
 
             let content = JSON.stringify(obj, null, 2);
-
-
             await RNFS.writeFile(path, content, 'utf8');
             ToastAndroid.show(`Stored in ${path}`, ToastAndroid.SHORT);
         } catch (error) {
-            ToastAndroid.show('Error saving object', ToastAndroid.SHORT);
+            console.log(error)
+            ToastAndroid.show(error, ToastAndroid.SHORT);
         }
     };
 
