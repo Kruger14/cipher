@@ -7,13 +7,12 @@ import ProfileScreen from './src/screen/ProfileScreen';
 
 
 // Import Heroicons
-import HomeIcon from 'react-native-heroicons/outline/HomeIcon';
-import EyeIcon from 'react-native-heroicons/mini/EyeIcon';
-import UserIcon from 'react-native-heroicons/outline/UserIcon';
 import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from './src/screen/SplashScreen';
 import OnboardScreen from './src/screen/OnboardScreen';
+import { HomeIcon, EyeIcon, UserIcon } from 'react-native-heroicons/solid';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
