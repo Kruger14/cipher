@@ -13,7 +13,6 @@ import SplashScreen from './src/screen/SplashScreen';
 import OnboardScreen from './src/screen/OnboardScreen';
 import { HomeIcon, EyeIcon, UserIcon } from 'react-native-heroicons/solid';
 
-
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
